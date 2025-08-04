@@ -85,14 +85,6 @@ def load_game(game_map, fog, player):
     # load player
     return
 
-def show_main_menu():
-    print()
-    print("--- Main Menu ----")
-    print("(N)ew game")
-    print("(L)oad saved game")
-#    print("(H)igh scores")
-    print("(Q)uit")
-    print("------------------")
 
 def show_town_menu():
     print()
@@ -117,71 +109,13 @@ print("How quickly can you get the 1000 GP you need to retire")
 print("  and live happily ever after?")
 print("-----------------------------------------------------------")
 
-def show_buy_menu():
-    print()
-    print("----------------------- Shop Menu -------------------------")
-    print("(P)ickaxe upgrade to Level 2 to mine silver ore for 50 GP")
-    print("(B)ackpack upgrade to carry 12 items for 20 GP")
-    print("(L)eave shop")
-    print("-----------------------------------------------------------")
-    print(f"GP {player['GP']}")
-
-# TODO: The game!  
-
-while True:
-    if game_state == 'main':
-        show_main_menu()
-        choice = input("Your choice? ").strip().lower()
-        if choice == 'n':
-            name = str(input("Greetings,miner! What is your name? "))
-            print(f"Pleased to meet you, {name}. Welcome to Sundrop Town!")
-            game_state = 'town'
-        elif choice == 'l':
-
-        elif choice == 'q':
-            game_state = 'quit'
-
-    elif game_state == 'town':
-        handle_town_menu()
-
-    elif game_state == 'mine':
-        handle_mine_menu()
-
-    elif game_state == 'in_mine':
-        handle_in_mine_menu()
-
-    elif game_state == 'buy':
-        show_buy_menu()
-
-    elif game_state == 'save':
-        handle_save_menu()
-
-    elif game_state == 'quit':
-        print("Thank you for playing Sundrop Caves!")
-        break
-
-    elif game_state == 'load':
-        load_game(game_map, fog, player)
-        print("Game loaded successfully.")
-        game_state = 'town'
+# TODO: The game!
     
- 
-def handle_town_menu():
-    print(f"DAY {player['day']}")
-    show_town_menu()
-    choice = input("Your choice? ").strip().lower()
-    if choice == 'b':
-        game_state = 'buy'
-        choice = input("Your choice? ").strip().lower()
-    elif choice == 'i':
-        show_information(player)
-    elif choice == 'm':
-        draw_map(game_map, fog, player)
-    elif choice == 'e':
-        print("You enter the mine, ready to start your adventure.")
-        game_state = 'in_mine'
-    elif choice == 'v':
-        save_game(game_map, fog, player)
-        print("Game saved successfully.")
-    elif choice == 'q':
-        game_state = 'main'
+def show_main_menu():
+    print()
+    print("--- Main Menu ----")
+    print("(N)ew game")
+    print("(L)oad saved game")
+#    print("(H)igh scores")
+    print("(Q)uit")
+    print("------------------")
