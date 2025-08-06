@@ -106,7 +106,6 @@ def show_town_menu():
     print("(Q)uit to main menu")
     print("------------------------")
             
-
 #--------------------------- MAIN GAME ---------------------------
 game_state = 'main'
 print("---------------- Welcome to Sundrop Caves! ----------------")
@@ -117,6 +116,7 @@ print("How quickly can you get the 1000 GP you need to retire")
 print("  and live happily ever after?")
 print("-----------------------------------------------------------")
 
+#This function shows the buy menu
 def show_buy_menu():
     print()
     print("----------------------- Shop Menu -------------------------")
@@ -127,7 +127,23 @@ def show_buy_menu():
     print(f"GP {player['GP']}")
 
 # TODO: The game!  
+#Below are the functions that handle the different game states
 
+# This function handles the main menu
+def handle_main_menu():
+    choice = input("Your choice? ").strip().lower()
+    if choice == 'n':
+        name = str(input("Greetings, miner! What is your name? "))
+        print(f"Pleased to meet you, {name}. Welcome to Sundrop Town!")
+        game_state = 'town'
+    elif choice == 'l':
+        load_game(game_map, fog, player)
+        print("Game loaded successfully.")
+        game_state = 'town'
+    else:
+        break
+
+# This function handles the town menu
 def handle_town_menu():
     print(f"DAY {player['day']}")
     show_town_menu()
@@ -148,18 +164,17 @@ def handle_town_menu():
     elif choice == 'q':
         game_state = 'main'
 
+#This function handles the mine menu
+def handle_mine_menu():
+
+#This function handles the in-mine menu
+def handle_in_mine_menu():
+
+
 while True:
     if game_state == 'main':
         show_main_menu()
-        choice = input("Your choice? ").strip().lower()
-        if choice == 'n':
-            name = str(input("Greetings,miner! What is your name? "))
-            print(f"Pleased to meet you, {name}. Welcome to Sundrop Town!")
-            game_state = 'town'
-        elif choice == 'l':
-
-        elif choice == 'q':
-            game_state = 'quit'
+        handle_main_menu()
 
     elif game_state == 'town':
         handle_town_menu()
@@ -174,7 +189,8 @@ while True:
         show_buy_menu()
 
     elif game_state == 'save':
-        handle_save_menu()
+        save_game(game_map, fog, player)
+        print("Game saved.")
 
     elif game_state == 'quit':
         print("Thank you for playing Sundrop Caves!")
@@ -182,7 +198,7 @@ while True:
 
     elif game_state == 'load':
         load_game(game_map, fog, player)
-        print("Game loaded successfully.")
+        print("Game Loaded.")
         game_state = 'town'
     
  
