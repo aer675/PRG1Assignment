@@ -80,7 +80,7 @@ def show_information(player):
     print(f"Name: {player['name']}")
     print(f"Portal position: ({player['x']}, {player['y']})")
     print("------------------------------")
-    print(f"Load: {player['copper'] + player['silver'] + player['gold']}/{backpack_capacity}")
+    print(f"Load: {len(player['copper'] + player['silver'] + player['gold'])}/{player ['backpack_capacity']}")
     print("------------------------------")
     print(f"GP: {player['GP']}")
     print(f"Steps taken: {player['steps']}")
@@ -193,18 +193,26 @@ def handle_buy_menu():
     while True:
         show_buy_menu()
         choice = input("Your choice? ").strip().lower()
-        if choice == 'p':
+        if choice == 'p' and player['GP'] > player['pickaxe_price']:
             player['pickaxe'] += 1
+            player['pickaxe_level'] += 1
+            player['pickaxe_price'] = pickaxe_price[player['pickaxe'] - 1]
+            player['GP'] -= player['pickaxe_price']
             print(f"Congratulations! You can now mine {ore}!")
-        if choice == 'b':
-            print(f"Congratulations! You can now carry {player['backpack'] + 2} items!")
+            return 'buy'
 
-        if choice =='l':
+        elif choice == 'b'and player['GP'] > player['backpack_price']:
+            print(f"Congratulations! You can now carry {player['backpack'] + 2} items!")
+            player['backpack'] += 2
+            player['GP'] -= player['backpack_price']
+            player['backpack_price'] *= player['backpack']
+            return 'buy'
+
+        elif choice =='l':
+            return 'town'
         else:
             print("Error. Please enter a valid choice.")
-            return 'buy'  # This will return to the buy menu if the input is invalid
-    if choice == 'l':
-        return 'town'  # This will return to the town menu
+            return 'buy' 
 
 #This function handles the mine menu
 def handle_mine_menu():
@@ -229,7 +237,6 @@ while True:
         game_state = handle_in_mine_menu()
 
     elif game_state == 'buy':
-        choice = input("Your choice? ").strip().lower()
         game_state = handle_buy_menu()
 
     elif game_state == 'quit':
