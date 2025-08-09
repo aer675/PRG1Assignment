@@ -136,13 +136,13 @@ def handle_main_menu():
     if choice == 'n':
         name = str(input("Greetings, miner! What is your name? "))
         print(f"Pleased to meet you, {name}. Welcome to Sundrop Town!")
-        game_state = 'town'
+        return 'town'
     elif choice == 'l':
         load_game(game_map, fog, player)
         print("Game loaded successfully.")
-        game_state = 'town'
+        return 'town'
     else:
-        game_state = 'quit'
+        return 'quit'
 
 # This function handles the town menu
 def handle_town_menu():
@@ -150,14 +150,14 @@ def handle_town_menu():
     show_town_menu()
     choice = input("Your choice? ").strip().lower()
     if choice == 'b':
-        game_state = 'buy'
+        return 'buy'
     elif choice == 'i':
         show_information(player)
     elif choice == 'm':
         draw_map(game_map, fog, player)
     elif choice == 'e':
         print("You enter the mine, ready to start your adventure.")
-        game_state = 'in_mine'
+        return 'in_mine'
     elif choice == 'v':
         save_game(game_map, fog, player)
         print("Game saved successfully.")
