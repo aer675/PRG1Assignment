@@ -57,6 +57,8 @@ def initialize_game(game_map, fog, player):
     player['steps'] = 0
     player['turns'] = TURNS_PER_DAY
     player['backpack'] = 10 # Game start with 10 item capacity
+    player['pickaxe'] = 1 # Game starts with pickaxe level 1
+
 
     clear_fog(fog, player)
     
@@ -131,8 +133,26 @@ print("-----------------------------------------------------------")
 def show_buy_menu():
     print()
     print("----------------------- Shop Menu -------------------------")
+    print("(P)ickaxe upgrade to Level {} to mine silver ore for {} GP")
+    print("(B)ackpack upgrade to carry {} items for {} GP")
+    print("(L)eave shop")
+    print("-----------------------------------------------------------")
+    print(f"GP {player['GP']}")
+    print("-----------------------------------------------------------")
+
+# This function shows the backpack menu
+def show_backpack_menu():
+    print ("----------------------- Shop Menu -------------------------")
+    print("(B)ackpack upgrade to carry {} items for {} GP")
+    print("(L)eave shop")
+    print("-----------------------------------------------------------")
+    print(f"GP {player['GP']}")
+    print("-----------------------------------------------------------")
+
+# This function shows the pickaxe menu
+def show_pickaxe_menu():
+    print ("----------------------- Shop Menu -------------------------")
     print("(P)ickaxe upgrade to Level 2 to mine silver ore for 50 GP")
-    print("(B)ackpack upgrade to carry 12 items for 20 GP")
     print("(L)eave shop")
     print("-----------------------------------------------------------")
     print(f"GP {player['GP']}")
@@ -185,16 +205,18 @@ def handle_town_menu():
 
 # This function handles the buy menu
 def handle_buy_menu():
-    show_buy_menu()
-    choice = input("Your choice? ").strip().lower()
-    while choice == 'b':
-        print ("----------------------- Shop Menu -------------------------")
-        print("(B)ackpack upgrade to carry {} items for {} GP")
-        print("(L)eave shop")
-        print("-----------------------------------------------------------")
-        print(f"GP {player['GP']}")
-        print("-----------------------------------------------------------")
+    while True:
+        show_buy_menu()
         choice = input("Your choice? ").strip().lower()
+        if choice == 'p':
+            player['pickaxe'] += 1
+            print(f"Congratulations! You can now mine {ore}!")
+        if choice == 'b':
+
+        if choice =='l':
+        else:
+            print("Error. Please enter a valid choice.")
+            return 'buy'  # This will return to the buy menu if the input is invalid
     if choice == 'l':
         return 'town'  # This will return to the town menu
 
