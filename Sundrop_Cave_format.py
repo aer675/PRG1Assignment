@@ -80,7 +80,7 @@ def show_information(player):
     print(f"Name: {player['name']}")
     print(f"Portal position: ({player['x']}, {player['y']})")
     print("------------------------------")
-    print(f"Load: {player['copper'] + player['silver'] + player['gold']}/{player ['backpack']}")
+    print(f"Load: {player['copper'] + player['silver'] + player['gold']} / {player ['backpack']}")
     print("------------------------------")
     print(f"GP: {player['GP']}")
     print(f"Steps taken: {player['steps']}")
@@ -113,6 +113,7 @@ def show_main_menu():
 def show_town_menu():
     print()
     # TODO: Show Day
+    print(f"DAY {player['day']}")
     print("----- Sundrop Town -----")
     print("(B)uy stuff")
     print("See Player (I)nformation")
@@ -190,7 +191,6 @@ def handle_town_menu():
         return 'quit'
 
     print()
-    print(f"DAY {player['day']}")
     show_town_menu()
     choice = input("Your choice? ").strip().lower()
     if choice == 'b':
@@ -234,7 +234,7 @@ def handle_buy_menu():
         
         else:
             print("Error. Please enter a valid choice.")
-            return 'buy' 
+            continue 
 
 #This function handles the mine menu
 def handle_mine_menu():
