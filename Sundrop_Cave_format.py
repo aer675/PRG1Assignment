@@ -69,6 +69,17 @@ def draw_view(game_map, fog, player):
 
 # This function shows the information for the player
 def show_information(player):
+    print()
+    print("----- Player Information -----")
+    print(f"Name: {player['name']}")
+    print(f"Portal position: ({player['x']}, {player['y']})")
+    print(f"Pickaxe level:{pickaxe_level} {pickaxe_material}")
+    print("------------------------------")
+    print(f"Load: {??}/{?}")
+    print("------------------------------")
+    print(f"GP: {player['GP']}")
+    print(f"Steps taken: {player['steps']}")
+    print("------------------------------")
     return
 
 # This function saves the game
