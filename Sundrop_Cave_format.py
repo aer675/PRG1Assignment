@@ -125,6 +125,7 @@ def show_buy_menu():
     print("(L)eave shop")
     print("-----------------------------------------------------------")
     print(f"GP {player['GP']}")
+    print("-----------------------------------------------------------")
 
 # TODO: The game!  
 #Below are the functions that handle the different game states
@@ -140,12 +141,17 @@ def handle_main_menu():
     elif choice == 'l':
         load_game(game_map, fog, player)
         print("Game loaded successfully.")
-        return 'town'
+        return 'load' # This will return to the town menu after loading
     elif choice == 'q':
         return 'quit'
+    else:
+        print ('Error. Please enter a valid choice.')
+        return 'main' # This will return to the main menu if the input is invalid to prevent breaking the game loop
 
 # This function handles the town menu
 def handle_town_menu():
+    #Sell ore when you enter the town menu:
+    #Code to sell ore zzz
     print(f"DAY {player['day']}")
     show_town_menu()
     choice = input("Your choice? ").strip().lower()
@@ -162,7 +168,7 @@ def handle_town_menu():
         save_game(game_map, fog, player)
         print("Game saved successfully.")
     elif choice == 'q':
-        return 'main'
+        return 'main' # This will return to the main menu
 
 #This function handles the mine menu
 def handle_mine_menu():
@@ -172,11 +178,19 @@ def handle_in_mine_menu():
 
 # This function handles the buy menu
 def handle_buy_menu():
+    show_buy_menu()
+    choice = input("Your choice? ").strip().lower()
+    if choice == 'p':
+    
+    elif choice == 'b':
 
-
-while True:
+    elif choice == 'l':
+       
+#Main game loop :D
+# Must have values for game_state, game_map, fog, and player else the game will break
+while True: 
     if game_state == 'main':
-        game_state = handle_main_menu()
+        game_state = handle_main_menu() #this will return to the main menu after loading , same for the rest
 
     elif game_state == 'town':
         game_state = handle_town_menu()
@@ -189,7 +203,7 @@ while True:
 
     elif game_state == 'buy':
         choice = input("Your choice? ").strip().lower()
-        game_state = show_buy_menu()
+        game_state = handle_buy_menu()
 
     elif game_state == 'quit':
         print("Thank you for playing Sundrop Caves!")
