@@ -56,6 +56,7 @@ def initialize_game(game_map, fog, player):
     player['day'] = 0
     player['steps'] = 0
     player['turns'] = TURNS_PER_DAY
+    player['backpack'] = 10 # Game start with 10 item capacity
 
     clear_fog(fog, player)
     
@@ -73,9 +74,8 @@ def show_information(player):
     print("----- Player Information -----")
     print(f"Name: {player['name']}")
     print(f"Portal position: ({player['x']}, {player['y']})")
-    print(f"Pickaxe level:{pickaxe_level} {pickaxe_material}")
     print("------------------------------")
-    print(f"Load: {??}/{?}")
+    print(f"Load: {player['copper'] + player['silver'] + player['gold']}/{backpack_capacity}")
     print("------------------------------")
     print(f"GP: {player['GP']}")
     print(f"Steps taken: {player['steps']}")
@@ -164,6 +164,7 @@ def handle_main_menu():
 def handle_town_menu():
     #Sell ore when you enter the town menu:
     #Code to sell ore zzz
+    print()
     print(f"DAY {player['day']}")
     show_town_menu()
     choice = input("Your choice? ").strip().lower()
