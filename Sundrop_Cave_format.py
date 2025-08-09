@@ -140,23 +140,6 @@ def show_buy_menu():
     print(f"GP {player['GP']}")
     print("-----------------------------------------------------------")
 
-# This function shows the backpack menu
-def show_backpack_menu():
-    print ("----------------------- Shop Menu -------------------------")
-    print("(B)ackpack upgrade to carry {} items for {} GP")
-    print("(L)eave shop")
-    print("-----------------------------------------------------------")
-    print(f"GP {player['GP']}")
-    print("-----------------------------------------------------------")
-
-# This function shows the pickaxe menu
-def show_pickaxe_menu():
-    print ("----------------------- Shop Menu -------------------------")
-    print("(P)ickaxe upgrade to Level 2 to mine silver ore for 50 GP")
-    print("(L)eave shop")
-    print("-----------------------------------------------------------")
-    print(f"GP {player['GP']}")
-    print("-----------------------------------------------------------")
 
 # TODO: The game!  
 #Below are the functions that handle the different game states
