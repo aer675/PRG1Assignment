@@ -168,8 +168,27 @@ def handle_main_menu():
 
 # This function handles the town menu
 def handle_town_menu():
-    #Sell ore when you enter the town menu:
-    #Code to sell ore zzz
+    #sell the ores
+    for mineral in minerals:
+        if player['copper'] > 0:
+            player['GP'] += randint(prices['copper'][0], prices['copper'][1]) * player['copper']
+            print(f"You sold {player['copper']} copper ore for {player['GP']} GP.")
+            player['copper'] = 0
+        if player['silver'] > 0:
+            player['GP'] += randint(prices['silver'][0], prices['silver'][1]) * player['silver']
+            print(f"You sold {player['silver']} silver ore for {player['GP']} GP.")
+            player['silver'] = 0
+        if player['gold'] > 0:
+            player['GP'] += randint(prices['gold'][0], prices['gold'][1]) * player['gold']
+            print(f"You sold {player['gold']} gold ore for {player['GP']} GP.")
+            player['gold'] = 0
+        print("You have earned some GP from selling your ores.")
+
+    # Check if player has enough GP to win
+    if player['GP'] >= WIN_GP:
+        print(f"Congratulations, {player['name']}! You have earned {player['GP']} GP and won the game!")
+        return 'quit'
+
     print()
     print(f"DAY {player['day']}")
     show_town_menu()
@@ -249,6 +268,3 @@ while True:
         load_game(game_map, fog, player)
         print("Game Loaded.")
         game_state = 'town'
-    
- 
-
