@@ -183,7 +183,17 @@ def handle_buy_menu():
     if choice == 'p':
         print ("You have purchased a pickaxe upgrade to Level 2 for 50 GP.")
     elif choice == 'b':
-        print("You have purchased a backpack upgrade to carry 12 items for 20 GP.")
+        print("----------------------- Shop Menu -------------------------")
+        print("(B)ackpack upgrade to carry 12 items for 20 GP")
+        print("(L)eave shop")
+        print("-----------------------------------------------------------")
+        print(f"GP {player['GP']}")
+        print("-----------------------------------------------------------")
+        choice = input("Your choice? ").strip().lower()
+        if choice == 'b':
+            print("You have purchased a backpack upgrade to carry {} items for 20 GP.")
+        elif choice == 'l':
+            return 'town'
     elif choice == 'l':
         return 'town'  # This will return to the town menu
        
