@@ -80,7 +80,7 @@ def show_information(player):
     print(f"Name: {player['name']}")
     print(f"Portal position: ({player['x']}, {player['y']})")
     print("------------------------------")
-    print(f"Load: {len(player['copper'] + player['silver'] + player['gold'])}/{player ['backpack_capacity']}")
+    print(f"Load: {player['copper'] + player['silver'] + player['gold']}/{player ['backpack']}")
     print("------------------------------")
     print(f"GP: {player['GP']}")
     print(f"Steps taken: {player['steps']}")
@@ -151,6 +151,7 @@ def handle_main_menu():
     show_main_menu()
     choice = input("Your choice? ").strip().lower()
     if choice == 'n':
+        player['day'] = 1
         name = str(input("Greetings, miner! What is your name? "))
         print(f"Pleased to meet you, {name}. Welcome to Sundrop Town!")
         player['name'] = name
@@ -190,26 +191,27 @@ def handle_town_menu():
 
 # This function handles the buy menu
 def handle_buy_menu():
+    show_buy_menu()
+    choice = input("Your choice? ").strip().lower()
     while True:
-        show_buy_menu()
-        choice = input("Your choice? ").strip().lower()
         if choice == 'p' and player['GP'] > player['pickaxe_price']:
             player['pickaxe'] += 1
             player['pickaxe_level'] += 1
             player['pickaxe_price'] = pickaxe_price[player['pickaxe'] - 1]
             player['GP'] -= player['pickaxe_price']
             print(f"Congratulations! You can now mine {ore}!")
-            return 'buy'
+            continue
 
         elif choice == 'b'and player['GP'] > player['backpack_price']:
             print(f"Congratulations! You can now carry {player['backpack'] + 2} items!")
             player['backpack'] += 2
             player['GP'] -= player['backpack_price']
-            player['backpack_price'] *= player['backpack']
-            return 'buy'
+            player['backpack_price'] = player['backpack'] * 2
+            continue
 
         elif choice =='l':
             return 'town'
+        
         else:
             print("Error. Please enter a valid choice.")
             return 'buy' 
