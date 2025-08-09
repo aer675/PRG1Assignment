@@ -57,7 +57,10 @@ def initialize_game(game_map, fog, player):
     player['steps'] = 0
     player['turns'] = TURNS_PER_DAY
     player['backpack'] = 10 # Game start with 10 item capacity
+    player['backpack_price'] = 1 # Price of the backpack upgrade
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
+    player['pickaxe_level'] = 1 # Game starts with pickaxe level 1
+    player['pickaxe_price'] = pickaxe_price[player['pickaxe'] - 1] # Price of the pickaxe upgrade
 
 
     clear_fog(fog, player)
@@ -133,13 +136,12 @@ print("-----------------------------------------------------------")
 def show_buy_menu():
     print()
     print("----------------------- Shop Menu -------------------------")
-    print("(P)ickaxe upgrade to Level {} to mine silver ore for {} GP")
-    print("(B)ackpack upgrade to carry {} items for {} GP")
+    print(f"(P)ickaxe upgrade to Level {player['pickaxe_level'] + 1} to mine {minerals} ore for {ore price} GP")
+    print(f"(B)ackpack upgrade to carry {player['backpack']} items for {player['backpack_price']} GP")
     print("(L)eave shop")
     print("-----------------------------------------------------------")
     print(f"GP {player['GP']}")
     print("-----------------------------------------------------------")
-
 
 # TODO: The game!  
 #Below are the functions that handle the different game states
@@ -195,6 +197,7 @@ def handle_buy_menu():
             player['pickaxe'] += 1
             print(f"Congratulations! You can now mine {ore}!")
         if choice == 'b':
+            print(f"Congratulations! You can now carry {player['backpack'] + 2} items!")
 
         if choice =='l':
         else:
