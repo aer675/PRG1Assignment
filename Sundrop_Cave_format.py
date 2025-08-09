@@ -170,6 +170,9 @@ def handle_mine_menu():
 #This function handles the in-mine menu
 def handle_in_mine_menu():
 
+# This function handles the buy menu
+def handle_buy_menu():
+
 
 while True:
     if game_state == 'main':
@@ -187,10 +190,6 @@ while True:
     elif game_state == 'buy':
         choice = input("Your choice? ").strip().lower()
         game_state = show_buy_menu()
-
-    elif game_state == 'save':
-        save_game(game_map, fog, player)
-        print("Game saved.")
 
     elif game_state == 'quit':
         print("Thank you for playing Sundrop Caves!")
