@@ -141,7 +141,7 @@ def handle_main_menu():
         load_game(game_map, fog, player)
         print("Game loaded successfully.")
         return 'town'
-    else:
+    elif choice == 'q':
         return 'quit'
 
 # This function handles the town menu
