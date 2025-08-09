@@ -131,6 +131,7 @@ def show_buy_menu():
 
 # This function handles the main menu
 def handle_main_menu():
+    show_main_menu()
     choice = input("Your choice? ").strip().lower()
     if choice == 'n':
         name = str(input("Greetings, miner! What is your name? "))
@@ -172,7 +173,6 @@ def handle_in_mine_menu():
 
 while True:
     if game_state == 'main':
-        show_main_menu()
         game_state = handle_main_menu()
 
     elif game_state == 'town':
