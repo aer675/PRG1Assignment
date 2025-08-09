@@ -175,21 +175,15 @@ def handle_town_menu():
 def handle_buy_menu():
     show_buy_menu()
     choice = input("Your choice? ").strip().lower()
-    if choice == 'p':
-        print ("You have purchased a pickaxe upgrade to Level 2 for 50 GP.")
-    elif choice == 'b':
-        print("----------------------- Shop Menu -------------------------")
-        print("(B)ackpack upgrade to carry 12 items for 20 GP")
+    while choice == 'b':
+        print ("----------------------- Shop Menu -------------------------")
+        print("(B)ackpack upgrade to carry {} items for {} GP")
         print("(L)eave shop")
         print("-----------------------------------------------------------")
         print(f"GP {player['GP']}")
         print("-----------------------------------------------------------")
         choice = input("Your choice? ").strip().lower()
-        if choice == 'b':
-            print("You have purchased a backpack upgrade to carry {} items for 20 GP.")
-        elif choice == 'l':
-            return 'town'
-    elif choice == 'l':
+    if choice == 'l':
         return 'town'  # This will return to the town menu
 
 #This function handles the mine menu
