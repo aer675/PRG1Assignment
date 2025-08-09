@@ -137,6 +137,7 @@ def handle_main_menu():
     if choice == 'n':
         name = str(input("Greetings, miner! What is your name? "))
         print(f"Pleased to meet you, {name}. Welcome to Sundrop Town!")
+        player['name'] = name
         return 'town'
     elif choice == 'l':
         load_game(game_map, fog, player)
@@ -170,12 +171,6 @@ def handle_town_menu():
     elif choice == 'q':
         return 'main' # This will return to the main menu
 
-#This function handles the mine menu
-def handle_mine_menu():
-
-#This function handles the in-mine menu
-def handle_in_mine_menu():
-
 # This function handles the buy menu
 def handle_buy_menu():
     show_buy_menu()
@@ -196,6 +191,13 @@ def handle_buy_menu():
             return 'town'
     elif choice == 'l':
         return 'town'  # This will return to the town menu
+
+#This function handles the mine menu
+def handle_mine_menu():
+
+#This function handles the in-mine menu
+def handle_in_mine_menu():
+
        
 #Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
