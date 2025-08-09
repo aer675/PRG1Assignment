@@ -141,7 +141,7 @@ def handle_main_menu():
         print("Game loaded successfully.")
         game_state = 'town'
     else:
-        break
+        game_state = 'quit'
 
 # This function handles the town menu
 def handle_town_menu():
@@ -150,7 +150,6 @@ def handle_town_menu():
     choice = input("Your choice? ").strip().lower()
     if choice == 'b':
         game_state = 'buy'
-        choice = input("Your choice? ").strip().lower()
     elif choice == 'i':
         show_information(player)
     elif choice == 'm':
@@ -162,7 +161,7 @@ def handle_town_menu():
         save_game(game_map, fog, player)
         print("Game saved successfully.")
     elif choice == 'q':
-        game_state = 'main'
+        return 'main'
 
 #This function handles the mine menu
 def handle_mine_menu():
@@ -174,19 +173,20 @@ def handle_in_mine_menu():
 while True:
     if game_state == 'main':
         show_main_menu()
-        handle_main_menu()
+        game_state = handle_main_menu()
 
     elif game_state == 'town':
-        handle_town_menu()
+        game_state = handle_town_menu()
 
     elif game_state == 'mine':
-        handle_mine_menu()
+        game_state = handle_mine_menu()
 
     elif game_state == 'in_mine':
-        handle_in_mine_menu()
+        game_state = handle_in_mine_menu()
 
     elif game_state == 'buy':
-        show_buy_menu()
+        choice = input("Your choice? ").strip().lower()
+        game_state = show_buy_menu()
 
     elif game_state == 'save':
         save_game(game_map, fog, player)
