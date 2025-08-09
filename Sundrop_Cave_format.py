@@ -181,10 +181,11 @@ def handle_buy_menu():
     show_buy_menu()
     choice = input("Your choice? ").strip().lower()
     if choice == 'p':
-    
+        print ("You have purchased a pickaxe upgrade to Level 2 for 50 GP.")
     elif choice == 'b':
-
+        print("You have purchased a backpack upgrade to carry 12 items for 20 GP.")
     elif choice == 'l':
+        return 'town'  # This will return to the town menu
        
 #Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
