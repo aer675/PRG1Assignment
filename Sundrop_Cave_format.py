@@ -174,11 +174,11 @@ def handle_town_menu():
             player['GP'] += randint(prices['copper'][0], prices['copper'][1]) * player['copper']
             print(f"You sold {player['copper']} copper ore for {player['GP']} GP.")
             player['copper'] = 0
-        if player['silver'] > 0:
+        elif player['silver'] > 0:
             player['GP'] += randint(prices['silver'][0], prices['silver'][1]) * player['silver']
             print(f"You sold {player['silver']} silver ore for {player['GP']} GP.")
             player['silver'] = 0
-        if player['gold'] > 0:
+        elif player['gold'] > 0:
             player['GP'] += randint(prices['gold'][0], prices['gold'][1]) * player['gold']
             print(f"You sold {player['gold']} gold ore for {player['GP']} GP.")
             player['gold'] = 0
@@ -209,10 +209,11 @@ def handle_town_menu():
         return 'main' # This will return to the main menu
 
 # This function handles the buy menu
+#BRUHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHh
 def handle_buy_menu():
-    show_buy_menu()
-    choice = input("Your choice? ").strip().lower()
     while True:
+        show_buy_menu()
+        choice = input("Your choice? ").strip().lower()
         if choice == 'p' and player['GP'] > player['pickaxe_price']:
             player['pickaxe'] += 1
             player['pickaxe_level'] += 1
