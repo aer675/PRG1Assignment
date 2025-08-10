@@ -278,8 +278,63 @@ def handle_buy_menu():
 def handle_mine_menu():
     show_mine_menu()
     choice = input("Action? ").strip().lower()
+    # only 20 turns per day
+    while player['turns'] != 20:
+        # Control the player's movement
+        if choice == 'w':
+            if player['y'] > 0:
+                player['y'] -= 1
+                player['steps'] += 1
+                player['turns'] -= 1
+            else:
+                print("You can't go further north!")
 
+        elif choice == 's':
+            if player['y'] < MAP_HEIGHT - 1:
+                player['y'] += 1
+                player['steps'] += 1
+                player['turns'] -= 1
+            else:
+                print("You can't go further south!")
 
+        elif choice == 'a':
+            if player['x'] > 0:
+                player['x'] -= 1
+                player['steps'] += 1
+                player['turns'] -= 1
+            else:
+                print("You can't go further west!")
+
+        elif choice == 'd':
+            if player['x'] < MAP_WIDTH - 1:
+                player['x'] += 1
+                player['steps'] += 1
+                player['turns'] -= 1
+            else:
+                print("You can't go further east!")
+
+        # Map, Information, Portal, Quit
+        elif choice == 'm':
+            draw_map(game_map, fog, player)
+
+        elif choice == 'i':
+            show_information(player)
+
+        elif choice == 'p':
+            if player['portalx'] == 0 and player['portaly'] == 0:
+                player['portalx'] = player['x']
+                player['portaly'] = player['y']
+                print(f"Portal set at ({player['portalx']}, {player['portaly']})")
+            else:
+                print(f"Portal already set at ({player['portalx']}, {player['portaly']})")
+
+        elif choice == 'q':
+            return 'main' # This will return to the main menu
+        
+        # For invalid input
+        else:
+            print("Error. Please enter a valid choice.")
+            continue
        
 # Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
