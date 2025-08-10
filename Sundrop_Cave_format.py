@@ -21,15 +21,23 @@ prices['gold'] = (10, 18)
 
 # This function loads a map structure (a nested list) from a file
 # It also updates MAP_WIDTH and MAP_HEIGHT
-def load_map(filename, map_struct):
-    map_file = open(filename, 'r')
-    global MAP_WIDTH
-    global MAP_HEIGHT
-    
-    map_struct.clear()
+def load_map(level1, map_struct):
+    map_file = open(level1, 'r')
+    lines = map_file.readlines()
+
+    map_struct.clear() # Clear the existing map structure 
     
     # TODO: Add your map loading code here
-    
+    for line in lines: 
+        line = line.strip() 
+        if line:
+            map_struct.append(list(line)) # Convert the line to a list of characters
+
+# Change the two main variables to keep track of the map size
+    global MAP_WIDTH 
+    global MAP_HEIGHT    
+
+# Calculate the width and height of the map
     MAP_WIDTH = len(map_struct[0])
     MAP_HEIGHT = len(map_struct)
 
@@ -239,14 +247,14 @@ def handle_buy_menu():
             print("Error. Please enter a valid choice.")
             continue 
 
-#This function handles the mine menu
+# This function handles the mine menu
 def handle_mine_menu():
 
-#This function handles the in-mine menu
+# This function handles the in-mine menu
 def handle_in_mine_menu():
 
        
-#Main game loop :D
+# Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
 while True: 
     if game_state == 'main':
