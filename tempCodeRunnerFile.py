@@ -243,13 +243,18 @@ def handle_main_menu():
 # This function handles the town menu
 def handle_town_menu():
     #sell the ores
+    total_gp_earned = 0
     for mineral in minerals:
         if player['mineral']> 0:
             min_price, max_price = prices[mineral]
             gp_earned = randint(min_price, max_price) * player[mineral]
-            player['GP'] += gp_earned
+            total_gp_earned += gp_earned
             print(f"You sold {player[mineral]} {mineral} ore for {gp_earned} GP.")
             player[mineral] = 0
+    
+    if total_gp_earned > 0:
+        player['GP'] += total_gp_earned
+        print(f"You earned a total of {total_gp_earned} GP from selling your ores.")
            
     # Check if player has enough GP to win
     if player['GP'] >= WIN_GP:
