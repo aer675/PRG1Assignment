@@ -352,13 +352,16 @@ def handle_town_menu():
         handle_town_menu()
     elif choice == 'e':
         print("You enter the mine, ready to start your adventure.")
-        return 'in_mine'
+        handle_mine_menu ()
     elif choice == 'v':
         save_game(game_map, fog, player)
         print("Game saved successfully.")
         handle_town_menu()
     elif choice == 'q':
-        return 'main' # This will return to the main menu
+        handle_main_menu () # This will return to the main menu
+    else:
+        print("Invalid input. Please try again.")
+        handle_town_menu ()
 
 # This function handles the buy menu
 # i Omfg this is soooo wcwcnsjodcbsxjin
