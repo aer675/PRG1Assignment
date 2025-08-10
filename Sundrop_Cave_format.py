@@ -147,6 +147,8 @@ def show_information(player):
     print("----- Player Information -----")
     print(f"Name: {player['name']}")
     print(f"Portal position: ({player['portalx']}, {player['portaly']})")
+     # Level of the pickaxe and the minerals it can mine
+    print(f"Pickaxe level: {player['pickaxe']}")
     print("------------------------------")
     print(f"Load: {player['copper'] + player['silver'] + player['gold']} / {player ['backpack']}")
     print("------------------------------")
@@ -161,6 +163,8 @@ def save_game(game_map, fog, player):
     # save fog
     # save player
     with open('save_game.txt', 'w') as f:
+        f.write(f"Map Width: {MAP_WIDTH}\n")
+        f.write(f"Map Height: {MAP_HEIGHT}\n")
         # Save the map
         for row in game_map:
             f.write(''.join(row) + '\n')
@@ -208,13 +212,13 @@ def load_game(game_map, fog, player):
     return
 
 def show_main_menu():
-    print()
-    print("--- Main Menu ----")
-    print("(N)ew game")
-    print("(L)oad saved game")
+print()
+print("--- Main Menu ----")
+print("(N)ew game")
+print("(L)oad saved game")
 #    print("(H)igh scores")
-    print("(Q)uit")
-    print("------------------")
+print("(Q)uit")
+print("------------------")
 
 def show_town_menu():
     print()
@@ -259,6 +263,40 @@ def show_mine_menu():
     print("(WASD) to move")
     print("(M)ap, (I)nformation, (P)ortal, (Q)uit to main menu")
 
+def sell_all_ores:
+    total_gp = 0
+
+    if player['copper']> 0:
+        copper_gp = randint(prices['copper'][0], prices['copper'][1]) * player['copper']
+        player['GP'] += copper_gp
+        total_gp += copper_gp
+        print(f"You sold {player['copper']} pieces of copper ore for {copper_gp} GP.")
+        player['copper'] = 0
+    
+    if player['silver'] > 0:
+        silver_gp = randint(prices['silver'][0], prices['silver'][1]) * player['silver']
+        player['GP'] += silver_gp
+        total_gp += silver_gp
+        print(f"You sold {player['silver']} pieces of silver ore for {silver_gp} GP.")
+        player['silver'] = 0
+    
+    if player['gold'] > 0:
+        gold_gp = randint(prices['gold'][0], prices['gold'][1]) * player['gold']
+        player['GP'] += gold_gp
+        total_gp += gold_gp
+        print(f"You sold {player['gold']} pieces of gold ore for {gold_gp} GP.")
+        player['gold'] = 0
+
+    # Total GP earned from selling ores
+    if total_gp > 0:
+        print(f"Total GP earned from selling ores: {total_gp}")
+           
+    # Check if player has enough GP to win
+    if player['GP'] >= WIN_GP:
+        print(f"Congratulations, {player['name']}! You have earned {player['GP']} GP and won the game!")
+        return 'quit
+
+
 
 #--------------------------- MAIN GAME ---------------------------
 game_state = 'main'
@@ -297,39 +335,6 @@ def handle_main_menu():
 
 # This function handles the town menu
 def handle_town_menu():
-    #sell the ores
-    total_gp = 0
-
-    if player['copper']> 0:
-        copper_gp = randint(prices['copper'][0], prices['copper'][1]) * player['copper']
-        player['GP'] += copper_gp
-        total_gp += copper_gp
-        print(f"You sold {player['copper']} pieces of copper ore for {copper_gp} GP.")
-        player['copper'] = 0
-    
-    if player['silver'] > 0:
-        silver_gp = randint(prices['silver'][0], prices['silver'][1]) * player['silver']
-        player['GP'] += silver_gp
-        total_gp += silver_gp
-        print(f"You sold {player['silver']} pieces of silver ore for {silver_gp} GP.")
-        player['silver'] = 0
-    
-    if player['gold'] > 0:
-        gold_gp = randint(prices['gold'][0], prices['gold'][1]) * player['gold']
-        player['GP'] += gold_gp
-        total_gp += gold_gp
-        print(f"You sold {player['gold']} pieces of gold ore for {gold_gp} GP.")
-        player['gold'] = 0
-
-    # Total GP earned from selling ores
-    if total_gp > 0:
-        print(f"Total GP earned from selling ores: {total_gp}")
-           
-    # Check if player has enough GP to win
-    if player['GP'] >= WIN_GP:
-        print(f"Congratulations, {player['name']}! You have earned {player['GP']} GP and won the game!")
-        return 'quit'
-
     print()
     show_town_menu()
     choice = input("Your choice? ").strip().lower()
