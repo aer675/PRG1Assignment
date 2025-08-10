@@ -212,13 +212,13 @@ def load_game(game_map, fog, player):
     return
 
 def show_main_menu():
-print()
-print("--- Main Menu ----")
-print("(N)ew game")
-print("(L)oad saved game")
-#    print("(H)igh scores")
-print("(Q)uit")
-print("------------------")
+    print()
+    print("--- Main Menu ----")
+    print("(N)ew game")
+    print("(L)oad saved game")
+    #    print("(H)igh scores")
+    print("(Q)uit")
+    print("------------------")
 
 def show_town_menu():
     print()
@@ -263,10 +263,10 @@ def show_mine_menu():
     print("(WASD) to move")
     print("(M)ap, (I)nformation, (P)ortal, (Q)uit to main menu")
 
-def sell_all_ores:
+def sell_all_ores():
     total_gp = 0
 
-    if player['copper']> 0:
+    if player['copper'] > 0:
         copper_gp = randint(prices['copper'][0], prices['copper'][1]) * player['copper']
         player['GP'] += copper_gp
         total_gp += copper_gp
@@ -294,8 +294,9 @@ def sell_all_ores:
     # Check if player has enough GP to win
     if player['GP'] >= WIN_GP:
         print(f"Congratulations, {player['name']}! You have earned {player['GP']} GP and won the game!")
-        return 'quit
-
+        return 'quit'
+    
+    return 'town'  # Return to the town menu after selling ores
 
 
 #--------------------------- MAIN GAME ---------------------------
@@ -551,8 +552,3 @@ while True:
     elif game_state == 'quit':
         print("Thank you for playing Sundrop Caves!")
         break
-
-    elif game_state == 'load':
-        load_game(game_map, fog, player)
-        print("Game Loaded.")
-        game_state = 'town'
