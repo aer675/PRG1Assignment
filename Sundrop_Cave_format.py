@@ -66,9 +66,7 @@ def initialize_game(game_map, fog, player):
     player['steps'] = 0
     player['turns'] = TURNS_PER_DAY
     player['backpack'] = 10 # Game start with 10 item capacity
-    player['backpack_price'] = 1 # Price of the backpack upgrade
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
-    player['pickaxe_level'] = 1 # Game starts with pickaxe level 1
 
 
     clear_fog(fog, player)
@@ -220,24 +218,30 @@ def handle_town_menu():
         return 'main' # This will return to the main menu
 
 # This function handles the buy menu
-#BRUHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHh
+# Omfg this is soooo wcwcnsjodcbsxjin
 def handle_buy_menu():
     while True:
+        bcost = player['backpack'] * 2 # Cost of the backpack upgrade
+        pcost =
+
         show_buy_menu()
         choice = input("Your choice? ").strip().lower()
-        if choice == 'p' and player['GP'] > player['pickaxe_price']:
+        if choice == 'p' and player['GP'] >= pcost:
+            player['GP'] -= pcost
             player['pickaxe'] += 1
-            player['pickaxe_level'] += 1
-            player['pickaxe_price'] = pickaxe_price[player['pickaxe'] - 1]
-            player['GP'] -= player['pickaxe_price']
-            print(f"Congratulations! You can now mine {ore}!")
+            if player['pickaxe'] == 1:
+                print("Congratulations! You can now mine copper!")
+            elif player['pickaxe'] == 2:
+                print("Congratulations! You can now mine silver!")
+            elif player['pickaxe'] == 3:
+                print("Congratulations! You can now mine gold!")
             continue
 
-        elif choice == 'b'and player['GP'] > player['backpack_price']:
+        elif choice == 'b' and player['GP'] >= bcost:
             print(f"Congratulations! You can now carry {player['backpack'] + 2} items!")
-            player['backpack'] += 2
-            player['GP'] -= player['backpack_price']
-            player['backpack_price'] = player['backpack'] * 2
+            player['GP'] -= bcost
+            player['backpack'] += 2            
+
             continue
 
         elif choice =='l':
