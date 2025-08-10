@@ -126,14 +126,17 @@ def draw_view(game_map, fog, player):
             y = player['y'] + y_offset
             x = player['x'] + x_offset
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
-                if fog[y][x] == '?':
-                    row_str += '?'
+                if player['y'] == y and player ['x'] == x:
+                    row_str += ' M '
+
                 elif player['portalx'] == x and player['portaly'] == y:
-                    row_str += 'P'
-                elif player['y'] == y and player['x'] == x:
-                    row_str += 'M'
+                    row_str += ' P '
+
+                elif fog[y][x]=='?':
+                    row_str += ' ? '
+
                 else:
-                    row_str += game_map[y][x]
+                    row_str += ' ' + game_map[y][x] + ' '
             else:
                 row_str += ' # ' #Wall of mine
         row_str += "|"
@@ -343,14 +346,17 @@ def handle_town_menu():
         return 'buy'
     elif choice == 'i':
         show_information(player)
+        return 'town'
     elif choice == 'm':
         draw_map(game_map, fog, player)
+        return 'town'
     elif choice == 'e':
         print("You enter the mine, ready to start your adventure.")
         return 'in_mine'
     elif choice == 'v':
         save_game(game_map, fog, player)
         print("Game saved successfully.")
+        return 'town'
     elif choice == 'q':
         return 'main' # This will return to the main menu
 
