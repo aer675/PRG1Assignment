@@ -339,28 +339,29 @@ def handle_main_menu():
 
 # This function handles the town menu
 def handle_town_menu():
+    sell_all_ores ()
     show_town_menu()
     choice = input("Your choice? ").strip().lower()
     if choice == 'b':
         return 'buy'
     elif choice == 'i':
         show_information(player)
-        handle_town_menu ()
+        return 'town'
     elif choice == 'm':
         draw_map(game_map, fog, player)
-        handle_town_menu()
+        return 'town'
     elif choice == 'e':
         print("You enter the mine, ready to start your adventure.")
-        handle_mine_menu ()
+        return 'in_mine'
     elif choice == 'v':
         save_game(game_map, fog, player)
         print("Game saved successfully.")
-        handle_town_menu()
+        return 'town'
     elif choice == 'q':
-        handle_main_menu () # This will return to the main menu
+        return 'main' # This will return to the main menu
     else:
         print("Invalid input. Please try again.")
-        handle_town_menu ()
+        return 'town'
 
 # This function handles the buy menu
 def handle_buy_menu():
