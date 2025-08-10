@@ -245,22 +245,11 @@ def handle_town_menu():
     for mineral in minerals:
         if player['mineral']> 0:
             min_price, max_price = prices[mineral]
-            #copper
-            player['GP'] += randint(prices['copper'][0], prices['copper'][1]) * player['copper']
-            print(f"You sold {player['copper']} copper ore for {player['GP']} GP.")
-            player['copper'] = 0
-
-            #silver
-            player['GP'] += randint(prices['silver'][0], prices['silver'][1]) * player['silver']
-            print(f"You sold {player['silver']} silver ore for {player['GP']} GP.")
-            player['silver'] = 0
-
-            #gold
-            player['GP'] += randint(prices['gold'][0], prices['gold'][1]) * player['gold']
-            print(f"You sold {player['gold']} gold ore for {player['GP']} GP.")
-            player['gold'] = 0
-        print("You have earned some GP from selling your ores.")
-
+            gp_earned = randint(min_price, max_price) * player[mineral]
+            player['GP'] += gp_earned
+            print(f"You sold {player[mineral]} {mineral} ore for {gp_earned} GP.")
+            player[mineral] = 0
+           
     # Check if player has enough GP to win
     if player['GP'] >= WIN_GP:
         print(f"Congratulations, {player['name']}! You have earned {player['GP']} GP and won the game!")
