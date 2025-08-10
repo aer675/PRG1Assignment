@@ -275,11 +275,13 @@ def handle_buy_menu():
             continue 
 
 # This function handles the mine menu
+#BEUHEUICNOINXCDSIJNCIDNDUIDNMKSx
 def handle_mine_menu():
     # only 20 turns per day
     while True:
         show_mine_menu()
         choice = input("Action? ").strip().lower()
+        player['mineral'] = player['copper'] + player['silver'] + player['gold'] # Total minerals in the player's inventory
 
         # Player cannot move past the edge of the map
         if choice == 'w':
@@ -314,32 +316,35 @@ def handle_mine_menu():
             else:
                 print("You can't go further east!")
 
-        # If player steps onto a mineral, it will be added to their inventory
-        if game_map[player['y']][player['x']] in mineral_names:
+        # If player steps onto a mineral, a random number pieces of ore will be added to their inventory
+        elif game_map[player['y']][player['x']] in mineral_names:
             mineral = mineral_names[game_map[player['y']][player['x']]]
-            if player['copper'] + player['silver'] + player['gold'] < player['backpack']:
+            if player['mineral'] < player['backpack']: # Check if the player has enough space in their backpack
+                pieces = randint(1, 3) # Random number of pieces of ore
                 if mineral == 'copper':
-                    player['copper'] += 1
-                    player['backpack'] += 1
-
+                    player['copper'] += pieces
                 elif mineral == 'silver':
-                    player['silver'] += 1
-                    player['backpack'] += 1
-
+                    player['silver'] += pieces
                 elif mineral == 'gold':
-                    player['gold'] += 1
-                    player['backpack'] += 1
-
-                print(f"You mined a {mineral} ore!")
-                game_map[player['y']][player['x']] = '.' # Clear the mineral from the map
+                    player['gold'] += pieces
+                print(f"You mined {pieces} pieces of {mineral} ore!")
+                game_map[player['y']][player['x']] = ' ' # Clear the mineral from the map
             else:
-                print("Your backpack is full! You cannot mine any more ore.")
+                print("You don't have enough space in your backpack to carry more ore!")
 
         # If player step on the 'T' square at (0, 0), they will be teleported to the town
         if player['x'] == 0 and player['y'] == 0:
             print("You have been teleported to Sundrop Town!")
             player['turns'] = TURNS_PER_DAY # Reset turns for the next day
-            player['day'] += 1  
+            player['day'] += 1
+            return 'town' # This will return to the town menu after teleporting
+
+        # If player runs out of turns, they will be teleported to the town
+        if player['turns'] <= 0:
+            print("You have run out of turns for today! You have been teleported to Sundrop Town!")
+            player['turns'] = TURNS_PER_DAY
+            player['day'] += 1
+            return 'town' # This will return to the town menu after teleporting
 
         # Map, Information, Portal, Quit
         elif choice == 'm':
@@ -352,6 +357,9 @@ def handle_mine_menu():
             player['portalx'] = player['x']
             player['portaly'] = player['y']
             print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
+            print("You have been teleported to Sundrop Town!")
+            player['turns'] = TURNS_PER_DAY # Reset turns for the next day
+            player['day'] += 1
             return 'town'
 
         elif choice == 'q':
