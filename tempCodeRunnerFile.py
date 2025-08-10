@@ -84,13 +84,26 @@ def initialize_game(game_map, fog, player):
     player['portalx'] = 0 # Portal position x
     player['portaly'] = 0 # Portal position y
     player['mineral'] = player['copper'] + player['silver'] + player['gold'] # Total mineral count
+    player['backpack_price'] = player['backpack'] * 2 # Initialize backpack upgrade price
 
     clear_fog(fog, player) # Clear the fog around the player at the start of the game
     
-# This function draws the entire map, covered by the fof
+# This function draws the entire map, covered by the fog
 def draw_map(game_map, fog, player):
+    print("\n--- Mine Map ---")
+    for y in range(len(game_map)):
+        row = ""
+        for x in range(len(game_map[y])):
+            if fog[y][x] == '?':
+                row += '?'
+            elif player['x'] == x and player['y'] == y:
+                row += 'P'
+            else:
+                row += game_map[y][x]
+        print(row)
+    print("----------------")
     return
-
+    print(f"Load: {player['copper'] + player['silver'] + player['gold']} / {player['backpack']}")
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
     return
@@ -258,7 +271,9 @@ def handle_town_menu():
            
     # Check if player has enough GP to win
     if player['GP'] >= WIN_GP:
+        print("You have earned enough GP to retire!")
         print(f"Congratulations, {player['name']}! You have earned {player['GP']} GP and won the game!")
+        print(f"And it only took you {player['day']} days and {player['steps']}!")
         return 'quit'
 
     print()
