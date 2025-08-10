@@ -327,7 +327,13 @@ def handle_mine_menu():
                 print(f"You mined a {mineral} ore!")
                 game_map[player['y']][player['x']] = '.' # Clear the mineral from the map
             else:
-                print("Your backpack is full! You cannot mine any more ore.")     
+                print("Your backpack is full! You cannot mine any more ore.")
+
+        # If player step on the 'T' square at (0, 0), they will be teleported to the town
+        if player['x'] == 0 and player['y'] == 0:
+            print("You have been teleported to Sundrop Town!")
+            player['turns'] = TURNS_PER_DAY # Reset turns for the next day
+            player['day'] += 1  
 
         # Map, Information, Portal, Quit
         elif choice == 'm':
