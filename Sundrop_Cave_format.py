@@ -125,7 +125,7 @@ def draw_view(game_map, fog, player):
         for x_offset in range(-1, 2):
             y = player['y'] + y_offset
             x = player['x'] + x_offset
-            
+
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
                 if player['y'] == y and player ['x'] == x:
                     row_str += ' M '
@@ -142,7 +142,7 @@ def draw_view(game_map, fog, player):
                 row_str += ' # ' #Wall of mine
         row_str += "|"
         print(row_str)
-    print("+" + "-" * 3 + "+")
+    print("+" + "---" * 3 + "+")
     return
 
 # This function shows the information for the player
