@@ -38,7 +38,7 @@ def load_map(LEVEL1, map_struct):
     map_struct.clear() # Clear the existing map structure 
     
     # TODO: Add your map loading code here
-    for line in lines: 
+    for line in map_file: 
         line = line.strip() 
         if line:
             map_struct.append(list(line)) # Convert the line to a list of characters
@@ -64,8 +64,7 @@ def clear_fog(fog, player):
     # Clear the fog around the player
     for y in range(max(0, player['y'] - 1), min(MAP_HEIGHT, player['y'] + 2)):
         for x in range(max(0, player['x'] - 1), min(MAP_WIDTH, player['x'] + 2)):
-            if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
-                fog[y][x] = game_map[y][x]
+            fog[y][x] = game_map[y][x]
 
 # This function initializes the game state
 def initialize_game(game_map, fog, player):
@@ -98,6 +97,7 @@ def initialize_game(game_map, fog, player):
     
 # This function draws the entire map, covered by the fog
 def draw_map(game_map, fog, player):
+    print() 
     print("--- Mine Map ---")
     print("+" + "-" * MAP_WIDTH + "+")
     for y in range(MAP_HEIGHT):
@@ -530,19 +530,58 @@ def handle_mine_menu():
     
 # Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
-while True: 
+while game_state != 'quit':
     if game_state == 'main':
-        game_state = handle_main_menu() #this will return to the main menu after loading , same for the rest
-
+        show_main_menu()
+        choice = input("Your choice? ").lower()
+        if choice == 'n':
+            player.clear()
+            name = input("Greetings, miner! What is your name? ")
+            player['name'] = name
+            initialize_game(game_map, fog, player)
+            print(f"Pleased to meet you, {name}. Welcome to Sundrop Town!")
+            game_state = 'town'
+        elif choice == 'l':
+            if load_game(game_map, fog, player):
+                game_state = 'town'
+            else:
+                game_state = 'main'
+        elif choice == 'q':
+            game_state = 'quit'
+        else:
+            print("Invalid choice.")
+    
     elif game_state == 'town':
-        game_state = handle_town_menu()
-
+        game_state = sell_all_ores() # Sell all ores automatically upon returning to town
+        if game_state == 'quit':
+            continue
+            
+        show_town_menu()
+        choice = input("Your choice? ").lower()
+        if choice == 'b':
+            game_state = handle_buy_menu()
+        elif choice == 'i':
+            show_information(player)
+        elif choice == 'm':
+            draw_map(game_map, fog, player)
+        elif choice == 'e':
+            print("You enter the mine.")
+            game_state = 'in_mine'
+        elif choice == 'v':
+            save_game(game_map, fog, player)
+        elif choice == 'q':
+            game_state = 'main'
+        else:
+            print("Invalid choice.")
+            
     elif game_state == 'in_mine':
-        game_state = handle_mine_menu()
+        print(f"DAY {player['day']}")
+        draw_view(game_map, fog, player)
+        print(f"Turns left: {player['turns']}  Load: {player['copper'] + player['silver'] + player['gold']}/{player['backpack']}  Steps: {player['steps']}")
+        print("(WASD) to move")
+        print("(M)ap, (I)nformation, (P)ortal, (Q)uit to main menu")
+        action = input("Action? ").lower()
+        game_state = handle_mine_menu(action)
+        
+print("Thank you for playing Sundrop Caves!")
 
-    elif game_state == 'buy':
-        game_state = handle_buy_menu()
-
-    elif game_state == 'quit':
-        print("Thank you for playing Sundrop Caves!")
-        break
