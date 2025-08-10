@@ -314,7 +314,7 @@ def handle_mine_menu():
                     print("You moved north.")  
             else:
                 print("You can't move north, you are at the top of the mine.")
-                
+
         elif choice == 'a':
             if player['x'] > 0:
                 player['x'] -= 1
@@ -343,7 +343,32 @@ def handle_mine_menu():
                 print("You can't move west, you are at the left edge of the mine.") 
         
         elif choice == 's':
-        
+            if player['y'] < MAP_HEIGHT - 1:
+                player['y'] += 1
+                player['steps'] += 1
+                player['turns'] -= 1
+                if game_map[player['y']][player['x']] == 'C':
+                    pieces = randint(1, 3)  # Random number of pieces of copper ore
+                    player['copper'] += pieces
+                    print(f"You mined {pieces} pieces of copper ore!")
+                elif game_map[player['y']][player['x']] == 'S':
+                    pieces = randint(1, 2)  # Random number of pieces of silver ore
+                    player['silver'] += pieces
+                    print(f"You mined {pieces} pieces of silver ore!")
+                elif game_map[player['y']][player['x']] == 'G':
+                    pieces = randint(1, 1)
+                    player['gold'] += pieces
+                    print(f"You mined {pieces} pieces of gold ore!")
+                elif game_map[player['y']][player['x']] == 'T':
+                    print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
+                    player['turns'] = TURNS_PER_DAY
+                    player['day'] += 1
+                    return 'town'
+                else:
+                    print("You moved south.")
+            else:
+                print("You can't move south, you are at the bottom of the mine.")
+
         elif choice == 'd':
 
         # Map, Information, Portal, Quit
