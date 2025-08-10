@@ -143,7 +143,7 @@ def show_town_menu():
 def show_buy_menu():
     print()
     print("----------------------- Shop Menu -------------------------")
-    print(f"(P)ickaxe upgrade to Level {player['pickaxe_level'] + 1} to mine {minerals} ore for {ore price} GP")
+    print(f"(P)ickaxe upgrade to Level {player['pickaxe_level'] + 1} to mine {minerals} ore for 150 GP")
     print(f"(B)ackpack upgrade to carry {player['backpack']} items for {player['backpack_price']} GP")
     print("(L)eave shop")
     print("-----------------------------------------------------------")
@@ -245,7 +245,7 @@ def handle_town_menu():
 def handle_buy_menu():
     while True:
         bcost = player['backpack'] * 2 # Cost of the backpack upgrade
-        pcost =
+        pcost = 100 
 
         show_buy_menu()
         choice = input("Your choice? ").strip().lower()
@@ -276,10 +276,10 @@ def handle_buy_menu():
 
 # This function handles the mine menu
 def handle_mine_menu():
-    show_mine_menu()
-    choice = input("Action? ").strip().lower()
     # only 20 turns per day
-    while player['turns'] != 20:
+    while True:
+        show_mine_menu()
+        choice = input("Action? ").strip().lower()
         # Player cannot move past the edge of the map
         if choice == 'w':
             if player['y'] > 0:
