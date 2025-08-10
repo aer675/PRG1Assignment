@@ -142,7 +142,7 @@ def draw_view(game_map, fog, player):
         row_str += "|"
         print(row_str)
     print("+" + "-" * 3 + "+")
-    return
+    return 'town'
 
 # This function shows the information for the player
 def show_information(player):
@@ -158,7 +158,7 @@ def show_information(player):
     print(f"GP: {player['GP']}")
     print(f"Steps taken: {player['steps']}")
     print("------------------------------")
-    return
+    return 'town'
 
 # This function saves the game
 def save_game(game_map, fog, player):
@@ -180,7 +180,7 @@ def save_game(game_map, fog, player):
         for key, value in player.items():
             f.write(f"{key}:{value}\n")
     print("Game saved successfully.")
-    return
+    return 'town'
         
 # This function loads the game
 def load_game(game_map, fog, player):
@@ -212,7 +212,7 @@ def load_game(game_map, fog, player):
                 else:
                     player[key] = value  # Keep as string otherwise
     print("Game loaded successfully.")
-    return
+    return 'town'
 
 def show_main_menu():
     print()
@@ -346,17 +346,14 @@ def handle_town_menu():
         return 'buy'
     elif choice == 'i':
         show_information(player)
-        return 'town'
     elif choice == 'm':
         draw_map(game_map, fog, player)
-        return 'town'
     elif choice == 'e':
         print("You enter the mine, ready to start your adventure.")
         return 'in_mine'
     elif choice == 'v':
         save_game(game_map, fog, player)
         print("Game saved successfully.")
-        return 'town'
     elif choice == 'q':
         return 'main' # This will return to the main menu
 
