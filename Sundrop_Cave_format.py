@@ -61,7 +61,6 @@ def initialize_game(game_map, fog, player):
     player['backpack_price'] = 1 # Price of the backpack upgrade
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
     player['pickaxe_level'] = 1 # Game starts with pickaxe level 1
-    player['pickaxe_price'] = pickaxe_price[player['pickaxe'] - 1] # Price of the pickaxe upgrade
 
 
     clear_fog(fog, player)
@@ -182,7 +181,7 @@ def handle_town_menu():
             player['GP'] += randint(prices['silver'][0], prices['silver'][1]) * player['silver']
             print(f"You sold {player['silver']} silver ore for {player['GP']} GP.")
             player['silver'] = 0
-            
+
             #gold
             player['GP'] += randint(prices['gold'][0], prices['gold'][1]) * player['gold']
             print(f"You sold {player['gold']} gold ore for {player['GP']} GP.")
