@@ -212,7 +212,7 @@ def load_game(game_map, fog, player):
                 else:
                     player[key] = value  # Keep as string otherwise
     print("Game loaded successfully.")
-    return
+    return 
 
 def show_main_menu():
     print()
@@ -346,17 +346,17 @@ def handle_town_menu():
         return 'buy'
     elif choice == 'i':
         show_information(player)
-        return 'town'
+        show_town_menu
     elif choice == 'm':
         draw_map(game_map, fog, player)
-        return 'town'
+        show_town_menu
     elif choice == 'e':
         print("You enter the mine, ready to start your adventure.")
         return 'in_mine'
     elif choice == 'v':
         save_game(game_map, fog, player)
         print("Game saved successfully.")
-        return 'town'
+        show_town_menu
     elif choice == 'q':
         return 'main' # This will return to the main menu
 
