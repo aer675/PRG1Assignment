@@ -465,6 +465,7 @@ def moving_in_mine(dx, dy):
         player['x'] = 0
         player['y'] = 0
         player['turns'] = TURNS_PER_DAY
+        handle_town_menu
         return 'town'
     
     return 'in_mine'
@@ -518,7 +519,9 @@ def handle_mine_menu():
             print("You have been teleported to Sundrop Town!")
             player['turns'] = TURNS_PER_DAY # Reset turns for the next day
             player['day'] += 1
+        
             return 'town'
+        
 
         elif choice == 'q':
             return 'main' # This will return to the main menu
