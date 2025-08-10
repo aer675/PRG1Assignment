@@ -364,7 +364,6 @@ def handle_town_menu():
         handle_town_menu ()
 
 # This function handles the buy menu
-# i Omfg this is soooo wcwcnsjodcbsxjin
 def handle_buy_menu():
     while True:
         bcost = player['backpack'] * 2 # Cost of the backpack upgrade
@@ -458,7 +457,6 @@ def handle_mine_menu():
         #If player steps onto a mineral, a random number pieces of ore will be added to their inventory
         # If player runs out of turns, they will be teleported to the town
         # If player step on the 'T' square at (0, 0), they will be teleported to the town
-        # All in if/elif statements of w a s d
         if choice == 'w':
             if player['y'] > 0:
                 player['y'] -= 1

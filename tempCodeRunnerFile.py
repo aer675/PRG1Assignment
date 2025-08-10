@@ -397,6 +397,55 @@ def handle_buy_menu():
             print("Error. Please enter a valid choice.")
             continue 
 
+#Moving in the mines 
+def moving_in_mine():                    
+    cell = game_map[player['y']][player['x']]
+
+    if cell == 'C' and player['pickaxe'] >= 1:
+        pieces = randint(1, 5)  # Random number of pieces of copper ore
+        current_load = player['copper'] + player['silver'] + player['gold']
+        if current_load + pieces > player['backpack']:
+            pieces_to_add = player['backpack'] - current_load
+            player['copper'] += pieces_to_add
+            print(f"You mined {pieces} pieces of copper ore!")
+            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+        else:
+            player['copper'] += pieces
+            print(f"You mined {pieces} pieces of copper ore!")
+        game_map[player['y']][player['x']] = ' '
+
+    elif cell == 'S' and player['pickaxe'] >= 2:
+        pieces = randint(1, 3)  # Random number of pieces of silver ore
+        current_load = player['copper'] + player['silver'] + player['gold']
+        if current_load + pieces > player['backpack']:
+            pieces_to_add = player['backpack'] - current_load
+            player['silver'] += pieces_to_add
+            print(f"You mined {pieces} pieces of silver ore!")
+            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+        else:
+            player['silver'] += pieces
+            print(f"You mined {pieces} pieces of silver ore!")
+        game_map[player['y']][player['x']] = ' '
+
+    elif cell == 'G' and player['pickaxe'] >= 3:
+        pieces = randint(1, 2)  # Random number of pieces of gold ore
+        current_load = player['copper'] + player['silver'] + player['gold']
+        if current_load + pieces > player['backpack']:
+            pieces_to_add = player['backpack'] - current_load
+            player['gold'] += pieces_to_add
+            print(f"You mined {pieces} pieces of gold ore!")
+            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+        else:
+            player['gold'] += pieces
+            print(f"You mined {pieces} pieces of gold ore!")
+        game_map[player['y']][player['x']] = ' '
+
+    elif cell == 'T':
+        print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
+        player['turns'] = TURNS_PER_DAY # Reset turns for the next day
+        player['day'] += 1
+        return 'town'
+
 # This function handles the mine menu
 #BEUHEUICNOINXCDSIJNCIDNDUIDNMKSx
 def handle_mine_menu():
@@ -415,26 +464,7 @@ def handle_mine_menu():
                 player['y'] -= 1
                 player['steps'] += 1
                 player['turns'] -= 1
-                cell = game_map[player['y']][player['x']]
-                if cell == 'C' and player['pickaxe'] >= 1:
-                    pieces = randint(1, 3)  # Random number of pieces of copper ore
-                    player['copper'] += pieces
-                    print(f"You mined {pieces} pieces of copper ore!")
-                elif cell == 'S'and player['pickaxe'] >= 2:
-                    pieces = randint(1, 2)  # Random number of pieces of silver ore
-                    player['silver'] += pieces
-                    print(f"You mined {pieces} pieces of silver ore!")
-                elif cell == 'G' and player['pickaxe'] >= 3:
-                    pieces = randint(1, 1)  # Random number of pieces of gold ore
-                    player['gold'] += pieces
-                    print(f"You mined {pieces} pieces of gold ore!")
-                elif cell == 'T':
-                    print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
-                    player['turns'] = TURNS_PER_DAY # Reset turns for the next day
-                    player['day'] += 1
-                    return 'town'
-                else:
-                    print("You moved north.")  
+                moving_in_mine()
             else:
                 print("You can't move north, you are at the top of the mine.")
 
@@ -443,25 +473,7 @@ def handle_mine_menu():
                 player['x'] -= 1
                 player['steps'] += 1
                 player['turns'] -= 1
-                if game_map[player['y']][player['x']] == 'C':
-                    pieces = randint(1, 3)  # Random number of pieces of copper ore
-                    player['copper'] += pieces
-                    print(f"You mined {pieces} pieces of copper ore!")  
-                elif game_map[player['y']][player['x']] == 'S':
-                    pieces = randint(1, 2)  # Random number of pieces of silver ore
-                    player['silver'] += pieces
-                    print(f"You mined {pieces} pieces of silver ore!")
-                elif game_map[player['y']][player['x']] == 'G':
-                    pieces = randint(1, 1)  # Random number of pieces of gold ore
-                    player['gold'] += pieces
-                    print(f"You mined {pieces} pieces of gold ore!")
-                elif game_map[player['y']][player['x']] == 'T':
-                    print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
-                    player['turns'] = TURNS_PER_DAY # Reset turns for the next day
-                    player['day'] += 1
-                    return 'town'
-                else:
-                    print("You moved west.")    
+                moving_in_mine ()
             else:
                 print("You can't move west, you are at the left edge of the mine.") 
         
@@ -470,25 +482,7 @@ def handle_mine_menu():
                 player['y'] += 1
                 player['steps'] += 1
                 player['turns'] -= 1
-                if game_map[player['y']][player['x']] == 'C':
-                    pieces = randint(1, 3)  # Random number of pieces of copper ore
-                    player['copper'] += pieces
-                    print(f"You mined {pieces} pieces of copper ore!")
-                elif game_map[player['y']][player['x']] == 'S':
-                    pieces = randint(1, 2)  # Random number of pieces of silver ore
-                    player['silver'] += pieces
-                    print(f"You mined {pieces} pieces of silver ore!")
-                elif game_map[player['y']][player['x']] == 'G':
-                    pieces = randint(1, 1)
-                    player['gold'] += pieces
-                    print(f"You mined {pieces} pieces of gold ore!")
-                elif game_map[player['y']][player['x']] == 'T':
-                    print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
-                    player['turns'] = TURNS_PER_DAY
-                    player['day'] += 1
-                    return 'town'
-                else:
-                    print("You moved south.")
+                moving_in_mine ()
             else:
                 print("You can't move south, you are at the bottom of the mine.")
 
@@ -497,25 +491,7 @@ def handle_mine_menu():
                 player['x'] += 1
                 player['steps'] += 1
                 player['turns'] -= 1
-                if game_map[player['y']][player['x']] == 'C':
-                    pieces = randint(1, 3)  # Random number of pieces of copper ore
-                    player['copper'] += pieces
-                    print(f"You mined {pieces} pieces of copper ore!")
-                elif game_map[player['y']][player['x']] == 'S':
-                    pieces = randint(1, 2)  # Random number of pieces of silver ore
-                    player['silver'] += pieces
-                    print(f"You mined {pieces} pieces of silver ore!")
-                elif game_map[player['y']][player['x']] == 'G':
-                    pieces = randint(1, 1)  # Random number of pieces of gold ore
-                    player['gold'] += pieces
-                    print(f"You mined {pieces} pieces of gold ore!")                 
-                elif game_map[player['y']][player['x']] == 'T':
-                    print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
-                    player['turns'] = TURNS_PER_DAY # Reset turns for the next day
-                    player['day'] += 1
-                    return 'town'       
-                else:
-                    print("You moved east.")
+                moving_in_mine()
             else:
                 print("You can't move east, you are at the right edge of the mine.")    
 
@@ -542,7 +518,7 @@ def handle_mine_menu():
         else:
             print("Error. Please enter a valid choice.")
             continue
-       
+    
 # Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
 while True: 
