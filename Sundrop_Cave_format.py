@@ -109,7 +109,7 @@ def draw_map(game_map, fog, player):
             elif player ['y'] == y and player['x'] == x:
                 row_to_print.append('M')
             elif player['portalx'] == x and player['portaly'] == y:
-                row_to_print.append('P')
+                row_to_print.append('T')
             else:
                 row_to_print.append(game_map[y][x])
         print("|" + ''.join(row_to_print) + "|")
@@ -456,16 +456,6 @@ def moving_in_mine(dx, dy):
         player['turns'] = TURNS_PER_DAY # Reset turns for the next day
         player['day'] += 1
         return 'town'
-    
-    if player ['turns'] <= 0:
-        print("You are exhausted. You place your portal stone here and zap back to town...")
-        player['portalx'] = player['x']
-        player['portaly'] = player['y']
-        player['day'] += 1
-        player['x'] = 0
-        player['y'] = 0
-        player['turns'] = TURNS_PER_DAY
-        return 'town'
 
 # This function handles the mine menu
 #BEUHEUICNOINXCDSIJNCIDNDUIDNMKSx
@@ -494,9 +484,12 @@ def handle_mine_menu():
         # Map, Information, Portal, Quit
         elif choice == 'm':
             draw_map(game_map, fog, player)
+            clear_fog (fog,player)
+            continue
 
         elif choice == 'i':
             show_information(player)
+            continue
 
         elif choice == 'p': # Set the portal's coordinates to the player's current location and then return to the town menu
             player['portalx'] = player['x']
@@ -514,6 +507,14 @@ def handle_mine_menu():
         else:
             print("Error. Please enter a valid choice.")
             continue
+        print("You are exhausted. You place your portal stone here and zap back to town...")
+    player['portalx'] = player['x']
+    player['portaly'] = player['y']
+    player['day'] += 1
+    player['x'] = 0
+    player['y'] = 0
+    player['turns'] = TURNS_PER_DAY
+    return 'town'
     
 # Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
