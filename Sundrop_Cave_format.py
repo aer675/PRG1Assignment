@@ -130,7 +130,7 @@ def draw_view(game_map, fog, player):
                     row_str += ' M '
 
                 elif player['portalx'] == x and player['portaly'] == y:
-                    row_str += ' P '
+                    row_str += ' T '
 
                 elif fog[y][x]=='?':
                     row_str += ' ? '
