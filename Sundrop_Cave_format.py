@@ -119,12 +119,13 @@ def draw_map(game_map, fog, player):
 
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
-    print("+" + "-" * 3 + "+")
+    print("+" + "---" * 3 + "+")
     for y_offset in range(-1, 2):
         row_str = "|"
         for x_offset in range(-1, 2):
             y = player['y'] + y_offset
             x = player['x'] + x_offset
+            
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
                 if player['y'] == y and player ['x'] == x:
                     row_str += ' M '
