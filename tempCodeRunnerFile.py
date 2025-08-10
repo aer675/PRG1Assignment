@@ -346,17 +346,17 @@ def handle_town_menu():
         return 'buy'
     elif choice == 'i':
         show_information(player)
-        show_town_menu
+        handle_town_menu ()
     elif choice == 'm':
         draw_map(game_map, fog, player)
-        show_town_menu
+        handle_town_menu()
     elif choice == 'e':
         print("You enter the mine, ready to start your adventure.")
         return 'in_mine'
     elif choice == 'v':
         save_game(game_map, fog, player)
         print("Game saved successfully.")
-        show_town_menu
+        handle_town_menu()
     elif choice == 'q':
         return 'main' # This will return to the main menu
 
