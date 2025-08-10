@@ -456,12 +456,24 @@ def moving_in_mine(dx, dy):
         player['turns'] = TURNS_PER_DAY # Reset turns for the next day
         player['day'] += 1
         return 'town'
+    
+    if player['turns'] <= 0:
+        print("You are exhausted. You place your portal stone here and zap back to town...")
+        player['portalx'] = player['x']
+        player['portaly'] = player['y']
+        player['day'] += 1
+        player['x'] = 0
+        player['y'] = 0
+        player['turns'] = TURNS_PER_DAY
+        return 'town'
+    
+    return 'in_mine'
 
 # This function handles the mine menu
 #BEUHEUICNOINXCDSIJNCIDNDUIDNMKSx
 def handle_mine_menu():
     # only 20 turns per day
-    while player['turns'] > 0:
+    while True:
         show_mine_menu()
         choice = input("Action? ").strip().lower()
 
@@ -470,16 +482,24 @@ def handle_mine_menu():
         # If player runs out of turns, they will be teleported to the town
         # If player step on the 'T' square at (0, 0), they will be teleported to the town
         if choice == 'w':
-            moving_in_mine(0, -1)
+            state = moving_in_mine(0, -1)
+            if state == 'town':
+                return 'town'
 
         elif choice == 'a':
-            moving_in_mine(-1, 0)
+            state = moving_in_mine(-1, 0)
+            if state == 'town':
+                return 'town'
         
         elif choice == 's':
-            moving_in_mine(0, 1)
+            state = moving_in_mine(0, 1)
+            if state == 'town':
+                return 'town'
 
         elif choice == 'd':
-            moving_in_mine(1, 0)
+            state = moving_in_mine(1, 0)
+            if state == 'town':
+                return 'town'
 
         # Map, Information, Portal, Quit
         elif choice == 'm':
@@ -507,14 +527,6 @@ def handle_mine_menu():
         else:
             print("Error. Please enter a valid choice.")
             continue
-        print("You are exhausted. You place your portal stone here and zap back to town...")
-    player['portalx'] = player['x']
-    player['portaly'] = player['y']
-    player['day'] += 1
-    player['x'] = 0
-    player['y'] = 0
-    player['turns'] = TURNS_PER_DAY
-    return 'town'
     
 # Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break

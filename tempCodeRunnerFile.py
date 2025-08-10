@@ -109,7 +109,7 @@ def draw_map(game_map, fog, player):
             elif player ['y'] == y and player['x'] == x:
                 row_to_print.append('M')
             elif player['portalx'] == x and player['portaly'] == y:
-                row_to_print.append('P')
+                row_to_print.append('T')
             else:
                 row_to_print.append(game_map[y][x])
         print("|" + ''.join(row_to_print) + "|")
@@ -130,7 +130,7 @@ def draw_view(game_map, fog, player):
                     row_str += ' M '
 
                 elif player['portalx'] == x and player['portaly'] == y:
-                    row_str += ' P '
+                    row_str += ' T '
 
                 elif fog[y][x]=='?':
                     row_str += ' ? '
@@ -396,7 +396,20 @@ def handle_buy_menu():
             continue 
 
 #Moving in the mines 
-def moving_in_mine():                    
+def moving_in_mine(dx, dy): 
+    new_x = player['x'] + dx
+    new_y = player['y'] + dy
+
+    if not (0 <= new_x < MAP_WIDTH and 0 <= new_y < MAP_HEIGHT):
+        print("You can't move that way, you are at the edge of the mine.")
+        player['turns'] -= 1
+        return 'in_mine'
+    player['x'] = new_x
+    player['y'] = new_y
+    player['steps'] += 1
+    player['turns'] -= 1
+    clear_fog(fog, player)
+
     cell = game_map[player['y']][player['x']]
 
     if cell == 'C' and player['pickaxe'] >= 1:
@@ -457,47 +470,26 @@ def handle_mine_menu():
         # If player runs out of turns, they will be teleported to the town
         # If player step on the 'T' square at (0, 0), they will be teleported to the town
         if choice == 'w':
-            if player['y'] > 0:
-                player['y'] -= 1
-                player['steps'] += 1
-                player['turns'] -= 1
-                moving_in_mine()
-            else:
-                print("You can't move north, you are at the top of the mine.")
+            moving_in_mine(0, -1)
 
         elif choice == 'a':
-            if player['x'] > 0:
-                player['x'] -= 1
-                player['steps'] += 1
-                player['turns'] -= 1
-                moving_in_mine ()
-            else:
-                print("You can't move west, you are at the left edge of the mine.") 
+            moving_in_mine(-1, 0)
         
         elif choice == 's':
-            if player['y'] < MAP_HEIGHT - 1:
-                player['y'] += 1
-                player['steps'] += 1
-                player['turns'] -= 1
-                moving_in_mine ()
-            else:
-                print("You can't move south, you are at the bottom of the mine.")
+            moving_in_mine(0, 1)
 
         elif choice == 'd':
-            if player['x'] < MAP_WIDTH - 1:
-                player['x'] += 1
-                player['steps'] += 1
-                player['turns'] -= 1
-                moving_in_mine()
-            else:
-                print("You can't move east, you are at the right edge of the mine.")    
+            moving_in_mine(1, 0)
 
         # Map, Information, Portal, Quit
         elif choice == 'm':
             draw_map(game_map, fog, player)
+            clear_fog (fog,player)
+            continue
 
         elif choice == 'i':
             show_information(player)
+            continue
 
         elif choice == 'p': # Set the portal's coordinates to the player's current location and then return to the town menu
             player['portalx'] = player['x']
@@ -515,6 +507,14 @@ def handle_mine_menu():
         else:
             print("Error. Please enter a valid choice.")
             continue
+        print("You are exhausted. You place your portal stone here and zap back to town...")
+    player['portalx'] = player['x']
+    player['portaly'] = player['y']
+    player['day'] += 1
+    player['x'] = 0
+    player['y'] = 0
+    player['turns'] = TURNS_PER_DAY
+    return 'town'
     
 # Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
