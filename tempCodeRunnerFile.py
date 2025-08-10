@@ -83,6 +83,7 @@ def initialize_game(game_map, fog, player):
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
     player['portalx'] = 0 # Portal position x
     player['portaly'] = 0 # Portal position y
+    player['mineral'] = player['copper'] + player['silver'] + player['gold'] # Total mineral count
 
     clear_fog(fog, player) # Clear the fog around the player at the start of the game
     

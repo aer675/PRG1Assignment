@@ -83,6 +83,7 @@ def initialize_game(game_map, fog, player):
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
     player['portalx'] = 0 # Portal position x
     player['portaly'] = 0 # Portal position y
+    player['mineral'] = player['copper'] + player['silver'] + player['gold'] # Total mineral count
 
     clear_fog(fog, player) # Clear the fog around the player at the start of the game
     
@@ -242,13 +243,18 @@ def handle_main_menu():
 # This function handles the town menu
 def handle_town_menu():
     #sell the ores
+    total_gp_earned = 0
     for mineral in minerals:
         if player['mineral']> 0:
             min_price, max_price = prices[mineral]
             gp_earned = randint(min_price, max_price) * player[mineral]
-            player['GP'] += gp_earned
+            total_gp_earned += gp_earned
             print(f"You sold {player[mineral]} {mineral} ore for {gp_earned} GP.")
             player[mineral] = 0
+    
+    if total_gp_earned > 0:
+        player['GP'] += total_gp_earned
+        print(f"You earned a total of {total_gp_earned} GP from selling your ores.")
            
     # Check if player has enough GP to win
     if player['GP'] >= WIN_GP:
