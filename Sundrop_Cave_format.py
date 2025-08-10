@@ -133,7 +133,7 @@ def draw_view(game_map, fog, player):
                     row_str += f" {fog[y][x]} "
             else:
                 row_str += " # "
-                
+
         row_str += "|"
         print(row_str)
     print("+" + "---" * 3 + "+")
@@ -166,10 +166,12 @@ def save_game(game_map, fog, player):
         for row in game_map:
             f.write(''.join(row) + '\n')
         f.write('\n')  # Add a newline to separate map from player data
+
         # Save the fog
         for row in fog:
             f.write(''.join(row) + '\n')
         f.write('\n')  # Add a newline to separate fog from player data
+        
         # Save the player data
         for key, value in player.items():
             f.write(f"{key}:{value}\n")
