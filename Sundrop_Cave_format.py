@@ -283,68 +283,42 @@ def handle_mine_menu():
         choice = input("Action? ").strip().lower()
         player['mineral'] = player['copper'] + player['silver'] + player['gold'] # Total minerals in the player's inventory
 
-        # Player cannot move past the edge of the map
+        # W, A, S, D for movement, 
+        #If player steps onto a mineral, a random number pieces of ore will be added to their inventory
+        # If player runs out of turns, they will be teleported to the town
+        # If player step on the 'T' square at (0, 0), they will be teleported to the town
+        # All in if/elif statements of w a s d
         if choice == 'w':
             if player['y'] > 0:
                 player['y'] -= 1
                 player['steps'] += 1
                 player['turns'] -= 1
-            else:
-                print("You can't go further north!")
-
-        elif choice == 's':
-            if player['y'] < MAP_HEIGHT - 1:
-                player['y'] += 1
-                player['steps'] += 1
-                player['turns'] -= 1
-            else:
-                print("You can't go further south!")
-
-        elif choice == 'a':
-            if player['x'] > 0:
-                player['x'] -= 1
-                player['steps'] += 1
-                player['turns'] -= 1
-            else:
-                print("You can't go further west!")
-
-        elif choice == 'd':
-            if player['x'] < MAP_WIDTH - 1:
-                player['x'] += 1
-                player['steps'] += 1
-                player['turns'] -= 1
-            else:
-                print("You can't go further east!")
-
-        # If player steps onto a mineral, a random number pieces of ore will be added to their inventory
-        elif game_map[player['y']][player['x']] in mineral_names:
-            mineral = mineral_names[game_map[player['y']][player['x']]]
-            if player['mineral'] < player['backpack']: # Check if the player has enough space in their backpack
-                pieces = randint(1, 3) # Random number of pieces of ore
-                if mineral == 'copper':
+                if game_map[player['y']][player['x']] == 'C':
+                    pieces = randint(1, 3)  # Random number of pieces of copper ore
                     player['copper'] += pieces
-                elif mineral == 'silver':
+                    print(f"You mined {pieces} pieces of copper ore!")
+                elif game_map[player['y']][player['x']] == 'S':
+                    pieces = randint(1, 2)  # Random number of pieces of silver ore
                     player['silver'] += pieces
-                elif mineral == 'gold':
+                    print(f"You mined {pieces} pieces of silver ore!")
+                elif game_map[player['y']][player['x']] == 'G':
+                    pieces = randint(1, 1)  # Random number of pieces of gold ore
                     player['gold'] += pieces
-                print(f"You mined {pieces} pieces of {mineral} ore!")
-                game_map[player['y']][player['x']] = ' ' # Clear the mineral from the map
+                    print(f"You mined {pieces} pieces of gold ore!")
+                elif game_map[player['y']][player['x']] == 'T':
+                    print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
+                    player['turns'] = TURNS_PER_DAY # Reset turns for the next day
+                    player['day'] += 1
+                    return 'town'
+                else:
+                    print("You moved north.")  
             else:
-                print("You don't have enough space in your backpack to carry more ore!")
-
-        # If player step on the 'T' square at (0, 0), they will be teleported to the town
-        if player['x'] == 0 and player['y'] == 0:
-            print("You have been teleported to Sundrop Town!")
-            player['turns'] = TURNS_PER_DAY # Reset turns for the next day
-            player['day'] += 1
-            return 'town' # This will return to the town menu after teleporting
-
-        # If player runs out of turns, they will be teleported to the town
-        if player['turns'] <= 0:
-            print("You have run out of turns for today! You have been teleported to Sundrop Town!")
-            player['turns'] = TURNS_PER_DAY
-            player['day'] += 1
-            return 'town' # This will return to the town menu after teleporting
+                print("You can't move north, you are at the top of the mine.")
+        elif choice == 'a':
+        
+        elif choice == 's':
+        
+        elif choice == 'd':
 
         # Map, Information, Portal, Quit
         elif choice == 'm':
