@@ -280,6 +280,7 @@ def handle_mine_menu():
     while True:
         show_mine_menu()
         choice = input("Action? ").strip().lower()
+
         # Player cannot move past the edge of the map
         if choice == 'w':
             if player['y'] > 0:
@@ -316,14 +317,19 @@ def handle_mine_menu():
         # If player steps onto a mineral, it will be added to their inventory
         if game_map[player['y']][player['x']] in mineral_names:
             mineral = mineral_names[game_map[player['y']][player['x']]]
-            if player['backpack'] > 0:
+            if player['copper'] + player['silver'] + player['gold'] < player['backpack']:
                 if mineral == 'copper':
                     player['copper'] += 1
+                    player['backpack'] += 1
+
                 elif mineral == 'silver':
                     player['silver'] += 1
+                    player['backpack'] += 1
+
                 elif mineral == 'gold':
                     player['gold'] += 1
-                player['backpack'] -= 1
+                    player['backpack'] += 1
+
                 print(f"You mined a {mineral} ore!")
                 game_map[player['y']][player['x']] = '.' # Clear the mineral from the map
             else:
@@ -342,13 +348,11 @@ def handle_mine_menu():
         elif choice == 'i':
             show_information(player)
 
-        elif choice == 'p':
-            if player['portalx'] == 0 and player['portaly'] == 0:
-                player['portalx'] = player['x']
-                player['portaly'] = player['y']
-                print(f"Portal set at ({player['portalx']}, {player['portaly']})")
-            else:
-                print(f"Portal already set at ({player['portalx']}, {player['portaly']})")
+        elif choice == 'p': # Set the portal's coordinates to the player's current location and then return to the town menu
+            player['portalx'] = player['x']
+            player['portaly'] = player['y']
+            print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
+            return 'town'
 
         elif choice == 'q':
             return 'main' # This will return to the main menu
