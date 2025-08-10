@@ -62,10 +62,11 @@ def initialize_fog():
 
 # This function clears the fog of war at the 3x3 square around the player
 def clear_fog(fog, player):
-    # Clear the fog around the player
+# Clear the fog around the player by setting the fog to the actual map tile
     for y in range(max(0, player['y'] - 1), min(MAP_HEIGHT, player['y'] + 2)):
         for x in range(max(0, player['x'] - 1), min(MAP_WIDTH, player['x'] + 2)):
-            fog[y][x] = ' '
+            if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
+                fog[y][x] = game_map[y][x]
     return
 
 # This function initializes the game state
@@ -119,29 +120,25 @@ def draw_map(game_map, fog, player):
 
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
-    print("+" + "-" * 3 + "+")
+    print("+" + "---" * 3 + "+")
     for y_offset in range(-1, 2):
         row_str = "|"
         for x_offset in range(-1, 2):
             y = player['y'] + y_offset
             x = player['x'] + x_offset
+            
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
-                if player['y'] == y and player ['x'] == x:
-                    row_str += ' M '
-
-                elif player['portalx'] == x and player['portaly'] == y:
-                    row_str += ' T '
-
-                elif fog[y][x]=='?':
-                    row_str += ' ? '
-
+                if player['y'] == y and player['x'] == x:
+                    row_str += " M "
                 else:
-                    row_str += ' ' + game_map[y][x] + ' '
+                    # Now, we correctly display the content from the fog map,
+                    # which has been updated by clear_fog.
+                    row_str += f" {fog[y][x]} "
             else:
-                row_str += ' # ' #Wall of mine
+                row_str += " # "
         row_str += "|"
         print(row_str)
-    print("+" + "-" * 3 + "+")
+    print("+" + "---" * 3 + "+")
     return
 
 # This function shows the information for the player
