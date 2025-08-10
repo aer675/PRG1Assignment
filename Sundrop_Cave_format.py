@@ -29,7 +29,7 @@ prices['gold'] = (10, 18)
 # This function loads a map structure (a nested list) from a file
 # It also updates MAP_WIDTH and MAP_HEIGHT
 def load_map(level1, map_struct):
-    map_file = open(level1, 'r')
+    map_file = open(level1.txt, 'r')
     lines = map_file.readlines()
 
     map_struct.clear() # Clear the existing map structure 
