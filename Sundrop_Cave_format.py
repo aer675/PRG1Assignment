@@ -52,6 +52,7 @@ def initialize_game(game_map, fog, player):
     player['copper'] = 0
     player['silver'] = 0
     player['gold'] = 0
+    player ['mineral'] = player['copper'] + player['silver'] + player ['gold'] # This is the total amount of ore the player has
     player['GP'] = 0
     player['day'] = 0
     player['steps'] = 0
@@ -171,15 +172,18 @@ def handle_main_menu():
 def handle_town_menu():
     #sell the ores
     for mineral in minerals:
-        if player['copper'] > 0:
+        if player['mineral']> 0:
+            #copper
             player['GP'] += randint(prices['copper'][0], prices['copper'][1]) * player['copper']
             print(f"You sold {player['copper']} copper ore for {player['GP']} GP.")
             player['copper'] = 0
-        elif player['silver'] > 0:
+
+            #silver
             player['GP'] += randint(prices['silver'][0], prices['silver'][1]) * player['silver']
             print(f"You sold {player['silver']} silver ore for {player['GP']} GP.")
             player['silver'] = 0
-        elif player['gold'] > 0:
+            
+            #gold
             player['GP'] += randint(prices['gold'][0], prices['gold'][1]) * player['gold']
             print(f"You sold {player['gold']} gold ore for {player['GP']} GP.")
             player['gold'] = 0
