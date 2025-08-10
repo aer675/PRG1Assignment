@@ -108,6 +108,19 @@ def save_game(game_map, fog, player):
     # save map
     # save fog
     # save player
+    with open('save_game.txt', 'w') as f:
+        # Save the map
+        for row in game_map:
+            f.write(''.join(row) + '\n')
+        f.write('\n')  # Add a newline to separate map from player data
+        # Save the fog
+        for row in fog:
+            f.write(''.join(row) + '\n')
+        f.write('\n')  # Add a newline to separate fog from player data
+        # Save the player data
+        for key, value in player.items():
+            f.write(f"{key}:{value}\n")
+    print("Game saved successfully.")
     return
         
 # This function loads the game
@@ -115,6 +128,31 @@ def load_game(game_map, fog, player):
     # load map
     # load fog
     # load player
+    with open('save_game.txt', 'r') as f:
+        lines = f.readlines()      
+    # Load the map
+    game_map.clear()
+    for line in lines:
+        line = line.strip()
+        if line and not line.startswith('?'):
+            game_map.append(list(line))  # Convert the line to a list of characters
+    # Load the fog
+    fog.clear()
+    for line in lines:
+        line = line.strip()         
+        if line and line.startswith('?'):
+            fog.append(list(line))  # Convert the line to a list of characters          
+    # Load the player data
+    for line in lines:
+        line = line.strip()
+        if line and ':' in line:
+            key, value = line.split(':', 1) 
+            if key in player:
+                if value.isdigit():     
+                    player[key] = int(value)  # Convert to integer if it's a number
+                else:
+                    player[key] = value  # Keep as string otherwise
+    print("Game loaded successfully.")
     return
 
 def show_main_menu():
@@ -281,7 +319,6 @@ def handle_mine_menu():
     while True:
         show_mine_menu()
         choice = input("Action? ").strip().lower()
-        player['mineral'] = player['copper'] + player['silver'] + player['gold'] # Total minerals in the player's inventory
 
         # W, A, S, D for movement, 
         #If player steps onto a mineral, a random number pieces of ore will be added to their inventory
@@ -429,7 +466,7 @@ while True:
     elif game_state == 'town':
         game_state = handle_town_menu()
 
-    elif game_state == 'mine':
+    elif game_state == 'in_mine':
         game_state = handle_mine_menu()
 
     elif game_state == 'buy':
