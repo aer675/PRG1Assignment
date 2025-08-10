@@ -47,17 +47,21 @@ def load_map(level1, map_struct):
 def clear_fog(fog, player):
     return
 
+# This function initializes the fog of war
+    # TODO: initialize fog
+def initialize_fog(fog, width, height):
+    for y in range(height):
+        row = []
+        for x in range(width):
+            row.append('?') # representing fog
+        fog.append(row)
+
+# This function initializes the game state
 def initialize_game(game_map, fog, player):
     # initialize map
     load_map("level1.txt", game_map)
 
-    # TODO: initialize fog
-    def initialize_fog(fog, width, height):
-        for y in range(height):
-            row = []
-            for x in range(width):
-                row.append('?') # representing fog
-            fog.append(row)
+    initialize_fog(fog, MAP_WIDTH, MAP_HEIGHT)
 
     # TODO: initialize player
     #   You will probably add other entries into the player dictionary
@@ -72,8 +76,9 @@ def initialize_game(game_map, fog, player):
     player['turns'] = TURNS_PER_DAY
     player['backpack'] = 10 # Game start with 10 item capacity
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
+    player['portalx'] = 0 # Portal position x
+    player['portaly'] = 0 # Portal position y
 
-    initialize_fog(fog, MAP_WIDTH, MAP_HEIGHT)
     clear_fog(fog, player) # Clear the fog around the player at the start of the game
     
 # This function draws the entire map, covered by the fof
@@ -133,16 +138,6 @@ def show_town_menu():
     print("Sa(V)e game")
     print("(Q)uit to main menu")
     print("------------------------")
-            
-#--------------------------- MAIN GAME ---------------------------
-game_state = 'main'
-print("---------------- Welcome to Sundrop Caves! ----------------")
-print("You spent all your money to get the deed to a mine, a small")
-print("  backpack, a simple pickaxe and a magical portal stone.")
-print()
-print("How quickly can you get the 1000 GP you need to retire")
-print("  and live happily ever after?")
-print("-----------------------------------------------------------")
 
 #This function shows the buy menu
 def show_buy_menu():
@@ -154,6 +149,16 @@ def show_buy_menu():
     print("-----------------------------------------------------------")
     print(f"GP {player['GP']}")
     print("-----------------------------------------------------------")
+
+#--------------------------- MAIN GAME ---------------------------
+game_state = 'main'
+print("---------------- Welcome to Sundrop Caves! ----------------")
+print("You spent all your money to get the deed to a mine, a small")
+print("  backpack, a simple pickaxe and a magical portal stone.")
+print()
+print("How quickly can you get the 1000 GP you need to retire")
+print("  and live happily ever after?")
+print("-----------------------------------------------------------")
 
 # TODO: The game!  
 #Below are the functions that handle the different game states
@@ -223,7 +228,7 @@ def handle_town_menu():
         return 'main' # This will return to the main menu
 
 # This function handles the buy menu
-# Omfg this is soooo wcwcnsjodcbsxjin
+# i Omfg this is soooo wcwcnsjodcbsxjin
 def handle_buy_menu():
     while True:
         bcost = player['backpack'] * 2 # Cost of the backpack upgrade
@@ -259,8 +264,6 @@ def handle_buy_menu():
 # This function handles the mine menu
 def handle_mine_menu():
 
-# This function handles the in-mine menu
-def handle_in_mine_menu():
 
        
 # Main game loop :D
@@ -274,9 +277,6 @@ while True:
 
     elif game_state == 'mine':
         game_state = handle_mine_menu()
-
-    elif game_state == 'in_mine':
-        game_state = handle_in_mine_menu()
 
     elif game_state == 'buy':
         game_state = handle_buy_menu()
