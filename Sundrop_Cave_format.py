@@ -52,7 +52,13 @@ def initialize_game(game_map, fog, player):
     load_map("level1.txt", game_map)
 
     # TODO: initialize fog
-    
+    def initialize_fog(fog, width, height):
+        for y in range(height):
+            row = []
+            for x in range(width):
+                row.append('?') # representing fog
+            fog.append(row)
+
     # TODO: initialize player
     #   You will probably add other entries into the player dictionary
     player['x'] = 0
@@ -60,16 +66,15 @@ def initialize_game(game_map, fog, player):
     player['copper'] = 0
     player['silver'] = 0
     player['gold'] = 0
-    player ['mineral'] = player['copper'] + player['silver'] + player ['gold'] # This is the total amount of ore the player has
     player['GP'] = 0
-    player['day'] = 0
+    player['day'] = 1
     player['steps'] = 0
     player['turns'] = TURNS_PER_DAY
     player['backpack'] = 10 # Game start with 10 item capacity
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
 
-
-    clear_fog(fog, player)
+    initialize_fog(fog, MAP_WIDTH, MAP_HEIGHT)
+    clear_fog(fog, player) # Clear the fog around the player at the start of the game
     
 # This function draws the entire map, covered by the fof
 def draw_map(game_map, fog, player):
