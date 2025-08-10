@@ -150,6 +150,19 @@ def show_buy_menu():
     print(f"GP {player['GP']}")
     print("-----------------------------------------------------------")
 
+# This function shows the mine menu
+def show_mine_menu():
+    print()
+    print("---------------------------------------------------")
+    print(f"                       DAY {player['day']}                       ")
+    print("---------------------------------------------------")
+    # print mini map 
+    draw_view(game_map, fog, player)
+    print(f"Turns left: {player['turns']}    Load: {player['copper'] + player['silver'] + player['gold']} / {player['backpack']}    Steps: {player['steps']}    ")
+    print("(WASD) to move")
+    print("(M)ap, (I)nformation, (P)ortal, (Q)uit to main menu")
+
+
 #--------------------------- MAIN GAME ---------------------------
 game_state = 'main'
 print("---------------- Welcome to Sundrop Caves! ----------------")
@@ -263,6 +276,8 @@ def handle_buy_menu():
 
 # This function handles the mine menu
 def handle_mine_menu():
+    show_mine_menu()
+    choice = input("Action? ").strip().lower()
 
 
        
