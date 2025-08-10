@@ -12,7 +12,7 @@ WIN_GP = 500
 
 minerals = ['copper', 'silver', 'gold']
 mineral_names = {'C': 'copper', 'S': 'silver', 'G': 'gold'}
-pickaxe_price = [50, 150]
+pickaxe_price = {1: 50, 2: 150} # Key is the pickaxe level, value is the price to upgrade
 
 prices = {}
 prices['copper'] = (1, 3)
@@ -45,6 +45,10 @@ def load_map(level1, map_struct):
 
 # This function clears the fog of war at the 3x3 square around the player
 def clear_fog(fog, player):
+    # Clear the fog around the player
+    for y in range(max(0, player['y'] - 1), min(MAP_HEIGHT, player['y'] + 2)):
+        for x in range(max(0, player['x'] - 1), min(MAP_WIDTH, player['x'] + 2)):
+            fog[y][x] = ' '
     return
 
 # This function initializes the fog of war
@@ -74,11 +78,11 @@ def initialize_game(game_map, fog, player):
     player['day'] = 1
     player['steps'] = 0
     player['turns'] = TURNS_PER_DAY
+    player['name'] = "" # Player's name
     player['backpack'] = 10 # Game start with 10 item capacity
     player['pickaxe'] = 1 # Game starts with pickaxe level 1
     player['portalx'] = 0 # Portal position x
     player['portaly'] = 0 # Portal position y
-    player['mineral'] = player['copper'] + player['silver'] + player['gold'] # Total minerals in the player's inventory
 
     clear_fog(fog, player) # Clear the fog around the player at the start of the game
     
@@ -109,6 +113,19 @@ def save_game(game_map, fog, player):
     # save map
     # save fog
     # save player
+    with open('save_game.txt', 'w') as f:
+        # Save the map
+        for row in game_map:
+            f.write(''.join(row) + '\n')
+        f.write('\n')  # Add a newline to separate map from player data
+        # Save the fog
+        for row in fog:
+            f.write(''.join(row) + '\n')
+        f.write('\n')  # Add a newline to separate fog from player data
+        # Save the player data
+        for key, value in player.items():
+            f.write(f"{key}:{value}\n")
+    print("Game saved successfully.")
     return
         
 # This function loads the game
@@ -116,6 +133,31 @@ def load_game(game_map, fog, player):
     # load map
     # load fog
     # load player
+    with open('save_game.txt', 'r') as f:
+        lines = f.readlines()      
+    # Load the map
+    game_map.clear()
+    for line in lines:
+        line = line.strip()
+        if line and not line.startswith('?'):
+            game_map.append(list(line))  # Convert the line to a list of characters
+    # Load the fog
+    fog.clear()
+    for line in lines:
+        line = line.strip()         
+        if line and line.startswith('?'):
+            fog.append(list(line))  # Convert the line to a list of characters          
+    # Load the player data
+    for line in lines:
+        line = line.strip()
+        if line and ':' in line:
+            key, value = line.split(':', 1) 
+            if key in player:
+                if value.isdigit():     
+                    player[key] = int(value)  # Convert to integer if it's a number
+                else:
+                    player[key] = value  # Keep as string otherwise
+    print("Game loaded successfully.")
     return
 
 def show_main_menu():
@@ -202,6 +244,7 @@ def handle_town_menu():
     #sell the ores
     for mineral in minerals:
         if player['mineral']> 0:
+            min_price, max_price = prices[mineral]
             #copper
             player['GP'] += randint(prices['copper'][0], prices['copper'][1]) * player['copper']
             print(f"You sold {player['copper']} copper ore for {player['GP']} GP.")
@@ -246,7 +289,7 @@ def handle_town_menu():
 def handle_buy_menu():
     while True:
         bcost = player['backpack'] * 2 # Cost of the backpack upgrade
-        pcost = 100 
+        pcost = pickaxe_price.get(player['pickaxe'], 0) # Cost of the pickaxe upgrade
 
         show_buy_menu()
         choice = input("Your choice? ").strip().lower()
@@ -279,7 +322,7 @@ def handle_buy_menu():
 #BEUHEUICNOINXCDSIJNCIDNDUIDNMKSx
 def handle_mine_menu():
     # only 20 turns per day
-    while True:
+    while player['turns'] > 0:
         show_mine_menu()
         choice = input("Action? ").strip().lower()
 
@@ -429,7 +472,7 @@ while True:
     elif game_state == 'town':
         game_state = handle_town_menu()
 
-    elif game_state == 'mine':
+    elif game_state == 'in_mine':
         game_state = handle_mine_menu()
 
     elif game_state == 'buy':
