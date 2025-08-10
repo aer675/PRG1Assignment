@@ -31,6 +31,9 @@ prices['gold'] = (10, 18)
 def load_map(LEVEL1, map_struct):
     map_file = open(LEVEL1, 'r')
     lines = map_file.readlines()
+    # Change the two main variables to keep track of the map size
+    global MAP_WIDTH 
+    global MAP_HEIGHT    
 
     map_struct.clear() # Clear the existing map structure 
     
@@ -39,10 +42,6 @@ def load_map(LEVEL1, map_struct):
         line = line.strip() 
         if line:
             map_struct.append(list(line)) # Convert the line to a list of characters
-
-# Change the two main variables to keep track of the map size
-    global MAP_WIDTH 
-    global MAP_HEIGHT    
 
 # Calculate the width and height of the map
     if map_struct:  # Check if the map_struct is not empty
@@ -65,17 +64,17 @@ def clear_fog(fog, player):
     # Clear the fog around the player
     for y in range(max(0, player['y'] - 1), min(MAP_HEIGHT, player['y'] + 2)):
         for x in range(max(0, player['x'] - 1), min(MAP_WIDTH, player['x'] + 2)):
-            fog[y][x] = ' '
-    return
+            if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
+                fog[y][x] = game_map[y][x]
 
 # This function initializes the game state
 def initialize_game(game_map, fog, player):
     # initialize map
     load_map("PRG1Assignment/LEVEL1.txt", game_map)
 
-    new_fog = initialize_fog()  # Initialize the fog of war
     fog.clear()
-    fog.extend(new_fog)  # Set the fog to the new initialized fog
+    for _ in range(MAP_HEIGHT):
+        fog.append(['?'] * MAP_WIDTH)
 
     # TODO: initialize player
     #   You will probably add other entries into the player dictionary
@@ -99,23 +98,24 @@ def initialize_game(game_map, fog, player):
     
 # This function draws the entire map, covered by the fog
 def draw_map(game_map, fog, player):
-    print("----- Mine Map -----")
+    print("--- Mine Map ---")
     print("+" + "-" * MAP_WIDTH + "+")
     for y in range(MAP_HEIGHT):
-        row_to_print = []
+        row_str = '|'
         for x in range(MAP_WIDTH):
-            if fog[y][x] == '?':
-                row_to_print.append('?')
-            elif player ['y'] == y and player['x'] == x:
-                row_to_print.append('M')
+            if player['y'] == y and player['x'] == x:
+                row_str += 'M'
+            elif fog[y][x] == '?':
+                row_str += '?'
             elif player['portalx'] == x and player['portaly'] == y:
-                row_to_print.append('T')
+                row_str += 'P'
             else:
-                row_to_print.append(game_map[y][x])
-        print("|" + ''.join(row_to_print) + "|")
+                row_str += game_map[y][x]
+        row_str += "|"
+        print(row_str)
     print("+" + "-" * MAP_WIDTH + "+")
     print()
-    return
+
 
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
@@ -125,25 +125,18 @@ def draw_view(game_map, fog, player):
         for x_offset in range(-1, 2):
             y = player['y'] + y_offset
             x = player['x'] + x_offset
-
+            
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
-                if player['y'] == y and player ['x'] == x:
-                    row_str += ' M '
-
-                elif player['portalx'] == x and player['portaly'] == y:
-                    row_str += ' T '
-
-                elif fog[y][x]=='?':
-                    row_str += ' ? '
-
+                if y == player['y'] and x == player['x']:
+                    row_str += " M "
                 else:
-                    row_str += ' ' + game_map[y][x] + ' '
+                    row_str += f" {fog[y][x]} "
             else:
-                row_str += ' # ' #Wall of mine
+                row_str += " # "
+                
         row_str += "|"
         print(row_str)
     print("+" + "---" * 3 + "+")
-    return
 
 # This function shows the information for the player
 def show_information(player):
