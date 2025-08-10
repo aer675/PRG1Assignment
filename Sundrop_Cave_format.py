@@ -12,7 +12,7 @@ WIN_GP = 500
 
 minerals = ['copper', 'silver', 'gold']
 mineral_names = {'C': 'copper', 'S': 'silver', 'G': 'gold'}
-pickaxe_price = [50, 150]
+pickaxe_price = {1: 50, 2: 150} # Key is the pickaxe level, value is the price to upgrade
 
 prices = {}
 prices['copper'] = (1, 3)
@@ -45,6 +45,10 @@ def load_map(level1, map_struct):
 
 # This function clears the fog of war at the 3x3 square around the player
 def clear_fog(fog, player):
+    # Clear the fog around the player
+    for y in range(max(0, player['y'] - 1), min(MAP_HEIGHT, player['y'] + 2)):
+        for x in range(max(0, player['x'] - 1), min(MAP_WIDTH, player['x'] + 2)):
+            fog[y][x] = ' '
     return
 
 # This function initializes the fog of war
@@ -316,7 +320,7 @@ def handle_buy_menu():
 #BEUHEUICNOINXCDSIJNCIDNDUIDNMKSx
 def handle_mine_menu():
     # only 20 turns per day
-    while True:
+    while player['turns'] > 0:
         show_mine_menu()
         choice = input("Action? ").strip().lower()
 
