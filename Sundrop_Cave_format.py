@@ -280,7 +280,10 @@ def handle_mine_menu():
     choice = input("Action? ").strip().lower()
     # only 20 turns per day
     while player['turns'] != 20:
-        # Control the player's movement
+        # Player cannot moce past the edge of the map
+        # If player backpack is full, they cannot step onto a mineral
+        # If player step onto a mineral, it will be added to their inventory
+        # If player step on the 'T' square at (0, 0), they will be teleported to the town
         if choice == 'w':
             if player['y'] > 0:
                 player['y'] -= 1
