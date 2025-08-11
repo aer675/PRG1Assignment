@@ -118,7 +118,7 @@ def draw_map(game_map, fog, player):
 
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
-    print("+" + "---" * 3 + "+")
+    print("+" + "---" + "+")
     for y_offset in range(-1, 2):
         row = "|"
         for x_offset in range(-1, 2):
@@ -127,15 +127,16 @@ def draw_view(game_map, fog, player):
             
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
                 if y == player['y'] and x == player['x']:
-                    row += " M "
+                    row += "M" # Single character for player
                 else:
-                    row += f" {fog[y][x]} "
+                    # Use a single character for the map tile
+                    row += fog[y][x]
             else:
-                row += " # "
+                row += "#"
         row += "|"
         print(row)
-    print("+" + "---" * 3 + "+")
-
+    print("+" + "---" + "+")
+    
 # This function shows the information for the player
 def show_information(player):
     print()
@@ -158,7 +159,7 @@ def save_game(game_map, fog, player):
     # save fog
     # save player
 
-    with open('save_game.txt', 'w') as f:
+    with open('PRG1Assignment\savegame.txt', 'w') as f:
          # Save map dimensions
         f.write(f"{MAP_WIDTH}\n{MAP_HEIGHT}\n")
             
@@ -178,24 +179,24 @@ def save_game(game_map, fog, player):
         
 # This function loads the game
 def load_game(game_map, fog, player):
-with open('save_game.txt', 'r') as f:
+    with open('save_game.txt', 'r') as f:
         lines = f.readlines()
-            
+        
         # Load map dimensions
         global MAP_WIDTH, MAP_HEIGHT
         MAP_WIDTH = int(lines[0].strip())
         MAP_HEIGHT = int(lines[1].strip())
-            
+        
         # Load map
         game_map.clear()
         for i in range(2, 2 + MAP_HEIGHT):
             game_map.append(list(lines[i].strip()))
-            
+        
         # Load fog
         fog.clear()
         for i in range(2 + MAP_HEIGHT, 2 + MAP_HEIGHT * 2):
             fog.append(list(lines[i].strip()))
-            
+        
         # Load player data
         player.clear()
         for line in lines[2 + MAP_HEIGHT * 2:]:
@@ -205,7 +206,7 @@ with open('save_game.txt', 'r') as f:
                     player[key] = int(value)
                 except ValueError:
                     player[key] = value
-            
+        
         print("Game loaded.")
 
 #This function shows the main menu
