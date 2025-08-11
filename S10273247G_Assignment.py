@@ -175,7 +175,7 @@ def save_game(game_map, fog, player):
         # Save the player data
         for key, value in player.items():
             f.write(f"{key}:{value}\n")
-    print("Game saved successfully.")
+    print("Game saved.")
     return
         
 # This function loads the game
@@ -210,6 +210,7 @@ def load_game(game_map, fog, player):
     print("Game loaded successfully.")
     return 
 
+#This function shows the main menu
 def show_main_menu():
     print()
     print("--- Main Menu ----")
@@ -219,6 +220,7 @@ def show_main_menu():
     print("(Q)uit")
     print("------------------")
 
+#This function shows the town menu
 def show_town_menu():
     print()
     # TODO: Show Day
@@ -240,7 +242,7 @@ def show_buy_menu():
         next_pickaxe = player['pickaxe'] + 1
         upgrade_cost = pickaxe_price.get(next_pickaxe, 0)
         next_mineral = minerals[player['pickaxe']]
-        print(f"(P)ickaxe upgrade to level {next_pickaxe} ({upgrade_cost} GP) - can mine {next_mineral}")
+        print(f"(P)ickaxe upgrade to level {next_pickaxe} to mine {next_mineral} for ({upgrade_cost} GP) ")
     else:
         print("Your pickaxe is already at the highest level.")
     bcost = player['backpack'] * 2 # Cost of the backpack upgrade
@@ -262,6 +264,7 @@ def show_mine_menu():
     print("(WASD) to move")
     print("(M)ap, (I)nformation, (P)ortal, (Q)uit to main menu")
 
+#def this function sell all ores when user is in town
 def sell_all_ores():
     total_gp = 0
 
@@ -269,26 +272,26 @@ def sell_all_ores():
         copper_gp = randint(prices['copper'][0], prices['copper'][1]) * player['copper']
         player['GP'] += copper_gp
         total_gp += copper_gp
-        print(f"You sold {player['copper']} pieces of copper ore for {copper_gp} GP.")
+        print(f"You sell {player['copper']} copper ore for {copper_gp} GP.")
         player['copper'] = 0
     
     if player['silver'] > 0:
         silver_gp = randint(prices['silver'][0], prices['silver'][1]) * player['silver']
         player['GP'] += silver_gp
         total_gp += silver_gp
-        print(f"You sold {player['silver']} pieces of silver ore for {silver_gp} GP.")
+        print(f"You sell {player['silver']} silver ore for {silver_gp} GP.")
         player['silver'] = 0
     
     if player['gold'] > 0:
         gold_gp = randint(prices['gold'][0], prices['gold'][1]) * player['gold']
         player['GP'] += gold_gp
         total_gp += gold_gp
-        print(f"You sold {player['gold']} pieces of gold ore for {gold_gp} GP.")
+        print(f"You sell {player['gold']} gold ore for {gold_gp} GP.")
         player['gold'] = 0
 
     # Total GP earned from selling ores
     if total_gp > 0:
-        print(f"Total GP earned from selling ores: {total_gp}")
+        print(f"You now have {total_gp} GP!")
            
     # Check if player has enough GP to win
     if player['GP'] >= WIN_GP:
@@ -410,6 +413,7 @@ def moving_in_mine(dx, dy):
     cell = game_map[player['y']][player['x']]
 
     if cell == 'C' and player['pickaxe'] >= 1:
+        print(" --------------------------------------------------- ")
         pieces = randint(1, 5)  # Random number of pieces of copper ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
@@ -423,6 +427,7 @@ def moving_in_mine(dx, dy):
         game_map[player['y']][player['x']] = ' '
 
     elif cell == 'S' and player['pickaxe'] >= 2:
+        print(" --------------------------------------------------- ")
         pieces = randint(1, 3)  # Random number of pieces of silver ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
@@ -436,6 +441,7 @@ def moving_in_mine(dx, dy):
         game_map[player['y']][player['x']] = ' '
 
     elif cell == 'G' and player['pickaxe'] >= 3:
+        print(" --------------------------------------------------- ")
         pieces = randint(1, 2)  # Random number of pieces of gold ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
@@ -455,7 +461,10 @@ def moving_in_mine(dx, dy):
         return 'town'
     
     if player['turns'] <= 0:
-        print("You are exhausted. You place your portal stone here and zap back to town...")
+        print(" --------------------------------------------------- ")
+        print("You can't carry any more, so you can't go that way.")
+        print("You are exhausted.")
+        print("You place your portal stone here and zap back to town...")
         player['portalx'] = player['x']
         player['portaly'] = player['y']
         player['day'] += 1
