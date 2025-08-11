@@ -68,8 +68,7 @@ def clear_fog(fog, player):
      # Clear the fog around the player by setting the fog to the actual map tile
     for y in range(max(0, player['y'] - 1), min(MAP_HEIGHT, player['y'] + 2)):
         for x in range(max(0, player['x'] - 1), min(MAP_WIDTH, player['x'] + 2)):
-            if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
-                fog[y][x] = game_map[y][x]
+            fog[y][x] = game_map[y][x]
     return
 
 # This function initializes the game state
@@ -77,9 +76,8 @@ def initialize_game(game_map, fog, player):
     # initialize map
     load_map("PRG1Assignment/LEVEL1.txt", game_map)
 
-    new_fog = initialize_fog()  # Initialize the fog of war
     fog.clear()
-    fog.extend(new_fog)  # Set the fog to the new initialized fog
+    fog.extend(initialize_fog())
 
     # TODO: initialize player
     #   You will probably add other entries into the player dictionary
@@ -103,23 +101,20 @@ def initialize_game(game_map, fog, player):
     
 # This function draws the entire map, covered by the fog
 def draw_map(game_map, fog, player):
-    print("----- Mine Map -----")
     print("+" + "-" * MAP_WIDTH + "+")
     for y in range(MAP_HEIGHT):
-        row_to_print = []
+        row = []
         for x in range(MAP_WIDTH):
-            if player['y'] == y and player['x'] == x:
-                row_to_print.append('M')
+            if player['x'] == x and player['y'] == y:
+                row.append('M')
             elif player['portalx'] == x and player['portaly'] == y:
-                row_to_print.append('T')
+                row.append('P')
             elif fog[y][x] == '?':
-                row_to_print.append('?')
+                row.append('?')
             else:
-                row_to_print.append(game_map[y][x])
-        print("|" + ''.join(row_to_print) + "|")
+                row.append(game_map[y][x])
+        print("|" + "".join(row) + "|")
     print("+" + "-" * MAP_WIDTH + "+")
-    print()
-    return
 
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
