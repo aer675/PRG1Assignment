@@ -5,7 +5,7 @@
 # sells them, and upgrades their equipment to reach a goal of 500 GP to win the game.
 
 from random import randint
-
+ 
 player = {}
 game_map = []
 fog = []
