@@ -258,39 +258,44 @@ def show_mine_menu():
 
 #def this function sell all ores when user is in town
 def sell_all_ores():
-    total_gp = 0
+    total_gp_earned = 0
+    sold_any = False
 
     if player['copper'] > 0:
         copper_gp = randint(prices['copper'][0], prices['copper'][1]) * player['copper']
         player['GP'] += copper_gp
-        total_gp += copper_gp
+        total_gp_earned += copper_gp
         print(f"You sell {player['copper']} copper ore for {copper_gp} GP.")
         player['copper'] = 0
+        sold_any = True
     
     if player['silver'] > 0:
         silver_gp = randint(prices['silver'][0], prices['silver'][1]) * player['silver']
         player['GP'] += silver_gp
-        total_gp += silver_gp
+        total_gp_earned += silver_gp
         print(f"You sell {player['silver']} silver ore for {silver_gp} GP.")
         player['silver'] = 0
+        sold_any = True
     
     if player['gold'] > 0:
         gold_gp = randint(prices['gold'][0], prices['gold'][1]) * player['gold']
         player['GP'] += gold_gp
-        total_gp += gold_gp
+        total_gp_earned += gold_gp
         print(f"You sell {player['gold']} gold ore for {gold_gp} GP.")
         player['gold'] = 0
+        sold_any = True
 
-    # Total GP earned from selling ores
-    if total_gp > 0:
-        print(f"You now have {total_gp} GP!")
+    if sold_any:
+        print(f"You now have {player['GP']} GP!")
            
-    # Check if player has enough GP to win
     if player['GP'] >= WIN_GP:
-        print(f"Congratulations, {player['name']}! You have earned {player['GP']} GP and won the game!")
-        return 'quit'
+        print()
+        print(f"Woo-hoo! Well done, {player['name']}, you have {player['GP']} GP!")
+        print("You now have enough to retire and play video games every day.")
+        print(f"And it only took you {player['day']} days and {player['steps']} steps! You win!")
+        return 'win'
     
-    return 'town'  # Return to the town menu after selling ores
+    return 'town'
 
 
 #--------------------------- MAIN GAME ---------------------------
