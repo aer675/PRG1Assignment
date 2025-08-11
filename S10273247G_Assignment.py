@@ -186,7 +186,7 @@ def load_game(game_map, fog, player):
     # load fog
     # load player
     with open('save_game.txt', 'r') as f:
-        lines = f.readlines().split('\n\n')    # Split by empty lines
+        lines = f.readlines()
 
     # Load the map
     game_map.clear()
