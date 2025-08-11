@@ -207,7 +207,7 @@ def load_game(game_map, fog, player):
                     player[key] = int(value)  # Convert to integer if it's a number
                 else:
                     player[key] = value  # Keep as string otherwise
-    print("Game loaded successfully.")
+    print("Game loaded.")
     return 
 
 #This function shows the main menu
@@ -328,8 +328,7 @@ def handle_main_menu():
         return 'town'
     elif choice == 'l':
         load_game(game_map, fog, player)
-        print("Game loaded successfully.")
-        return 'load' # This will return to the town menu after loading
+        return 'town' # This will return to the town menu after loading
     elif choice == 'q':
         return 'quit'
     else:
@@ -354,8 +353,7 @@ def handle_town_menu():
         return 'in_mine'
     elif choice == 'v':
         save_game(game_map, fog, player)
-        print("Game saved successfully.")
-        handle_town_menu()
+        return 'town'
     elif choice == 'q':
         return 'main' # This will return to the main menu
     else:
