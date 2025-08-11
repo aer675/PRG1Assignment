@@ -264,6 +264,7 @@ def show_mine_menu():
     print(f"Turns left: {player['turns']}    Load: {player['copper'] + player['silver'] + player['gold']} / {player['backpack']}    Steps: {player['steps']}    ")
     print("(WASD) to move")
     print("(M)ap, (I)nformation, (P)ortal, (Q)uit to main menu")
+    print("-----------------------------------------------------")
 
 #def this function sell all ores when user is in town
 def sell_all_ores():
@@ -298,10 +299,11 @@ def sell_all_ores():
         print(f"You now have {player['GP']} GP!")
            
     if player['GP'] >= WIN_GP:
-        print()
+        print("------------------------------------------------------------- ")
         print(f"Woo-hoo! Well done, {player['name']}, you have {player['GP']} GP!")
         print("You now have enough to retire and play video games every day.")
         print(f"And it only took you {player['day']} days and {player['steps']} steps! You win!")
+        print("------------------------------------------------------------- ")
         return 'win'
     
     return 'town'
@@ -506,6 +508,7 @@ def handle_mine_menu():
             show_information(player)
             continue
         elif choice == 'p':
+            print ("-")
             print("You place your portal stone here and zap back to town.")
             player['portalx'] = player['x']
             player['portaly'] = player['y']
