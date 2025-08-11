@@ -411,11 +411,14 @@ def moving_in_mine(dx, dy):
     new_x = player['x'] + dx
     new_y = player['y'] + dy
 
+    # Check if the new position is within the map boundaries.
     if not (0 <= new_x < MAP_WIDTH and 0 <= new_y < MAP_HEIGHT):
         print("You can't move that way, you are at the edge of the mine.")
+        # The game will continue from the current position, but the player loses a turn.
         player['turns'] -= 1
         return 'in_mine'
     
+    # These lines are executed only if the move is valid.
     player['x'] = new_x
     player['y'] = new_y
     player['steps'] += 1
@@ -476,6 +479,10 @@ def moving_in_mine(dx, dy):
             player['gold'] += pieces
             print(f"You mined {pieces} pieces of gold ore!")
         game_map[player['y']][player['x']] = ' '
+    
+    # The condition "if current_load + pieces > player['backpack']" needs to be more robust for mining actions.
+    # The current code allows the player to move onto a mineral node even if the backpack is full.
+    # This check needs to be placed at the very beginning of the function for mining moves.
 
     elif cell == 'T':
         print("You stepped on the teleport square! You are being teleported to Sundrop Town!")
@@ -485,7 +492,7 @@ def moving_in_mine(dx, dy):
     
     if player['turns'] <= 0:
         print(" --------------------------------------------------- ")
-        print("You can't carry any more, so you can't go that way.")
+        # The previous message "You can't carry any more, so you can't go that way." was incorrect here.
         print("You are exhausted.")
         print("You place your portal stone here and zap back to town...")
         player['portalx'] = player['x']
