@@ -55,21 +55,12 @@ def initialize_fog():
         new_fog.append(row)
     return new_fog
 
-# This function initializes the fog of war
-    # TODO: initialize fog
-def initialize_fog():
-    new_fog = []
-    for y in range(MAP_HEIGHT):
-        row = ['?'] * MAP_WIDTH  # Initialize each row with '?' to represent fog
-        new_fog.append(row)
-    return new_fog
-
 # This function clears the fog of war at the 3x3 square around the player
 def clear_fog(fog, player):
-     # Clear the fog around the player by setting the fog to the actual map tile
     for y in range(max(0, player['y'] - 1), min(MAP_HEIGHT, player['y'] + 2)):
         for x in range(max(0, player['x'] - 1), min(MAP_WIDTH, player['x'] + 2)):
-            fog[y][x] = game_map[y][x]
+            if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
+                fog[y][x] = game_map[y][x]
     return
 
 # This function initializes the game state
@@ -128,9 +119,8 @@ def draw_view(game_map, fog, player):
             
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
                 if y == player['y'] and x == player['x']:
-                    row += "M" # Single character for player
+                    row += "M"
                 else:
-                    # Use a single character for the map tile
                     row += fog[y][x]
             else:
                 row += "#"
@@ -143,7 +133,8 @@ def show_information(player):
     print()
     print("----- Player Information -----")
     print(f"Name: {player['name']}")
-    print(f"Portal position: ({player['portalx']}, {player['portaly']})")
+    if 'portalx' in player and 'portaly' in player:
+        print(f"Portal position: ({player['portalx']}, {player['portaly']})")
      # Level of the pickaxe and the minerals it can mine
     print(f"Pickaxe level: {player['pickaxe']}")
     print("------------------------------")
@@ -159,56 +150,56 @@ def save_game(game_map, fog, player):
     # save map
     # save fog
     # save player
-
-    with open('savegame.txt', 'w') as f:
-         # Save map dimensions
-        f.write(f"{MAP_WIDTH}\n{MAP_HEIGHT}\n")
-            
-        # Save map
-        for row in game_map:
-            f.write(''.join(row) + '\n')
-            
-        # Save fog
-        for row in fog:
-            f.write(''.join(row) + '\n')
-            
-            # Save player data
-        for key, value in player.items():
-            f.write(f"{key}:{value}\n")
-            
-        print("Game saved.")
+    f = open('savegame.txt', 'w')
+    f.write(f"MAP_WIDTH:{MAP_WIDTH}\n")
+    f.write(f"MAP_HEIGHT:{MAP_HEIGHT}\n")
+    
+    for row in game_map:
+        f.write(''.join(row) + '\n')
+        
+    for row in fog:
+        f.write(''.join(row) + '\n')
+        
+    for key, value in player.items():
+        f.write(f"{key}:{value}\n")
+    
+    f.close()
+    print("Game saved.")
         
 # This function loads the game
 def load_game(game_map, fog, player):
-    with open('save_game.txt', 'r') as f:
+    try:
+        f = open('savegame.txt', 'r')
         lines = f.readlines()
+        f.close()
         
-        # Load map dimensions
         global MAP_WIDTH, MAP_HEIGHT
-        MAP_WIDTH = int(lines[0].strip())
-        MAP_HEIGHT = int(lines[1].strip())
         
-        # Load map
+        MAP_WIDTH = int(lines[0].strip().split(':', 1)[1])
+        MAP_HEIGHT = int(lines[1].strip().split(':', 1)[1])
+        
         game_map.clear()
         for i in range(2, 2 + MAP_HEIGHT):
             game_map.append(list(lines[i].strip()))
         
-        # Load fog
         fog.clear()
         for i in range(2 + MAP_HEIGHT, 2 + MAP_HEIGHT * 2):
             fog.append(list(lines[i].strip()))
         
-        # Load player data
         player.clear()
         for line in lines[2 + MAP_HEIGHT * 2:]:
             if ':' in line:
                 key, value = line.strip().split(':', 1)
-                try:
+                if key in ['x', 'y', 'copper', 'silver', 'gold', 'GP', 'day', 'steps', 'turns', 'backpack', 'pickaxe', 'portalx', 'portaly']:
                     player[key] = int(value)
-                except ValueError:
+                else:
                     player[key] = value
         
         print("Game loaded.")
+        return True
+    except (IOError, IndexError, ValueError):
+        print("Error: Could not load saved game.")
+        return False
 
 #This function shows the main menu
 def show_main_menu():
@@ -238,18 +229,19 @@ def show_town_menu():
 def show_buy_menu():
     print()
     print("----------------------- Shop Menu -------------------------")
-    if player['pickaxe'] < len(minerals):
+    if player['pickaxe'] < 3:
         next_pickaxe = player['pickaxe'] + 1
         upgrade_cost = pickaxe_price.get(next_pickaxe, 0)
         next_mineral = minerals[player['pickaxe']]
-        print(f"(P)ickaxe upgrade to level {next_pickaxe} to mine {next_mineral} for ({upgrade_cost} GP) ")
+        print(f"(P)ickaxe upgrade to Level {next_pickaxe} to mine {next_mineral} ore for {upgrade_cost} GP")
     else:
         print("Your pickaxe is already at the highest level.")
-    bcost = player['backpack'] * 2 # Cost of the backpack upgrade
-    print(f"(B)ackpack upgrade to carry {player['backpack'] + 2} items for ({bcost} GP)")
+    
+    bcost = player['backpack'] * 2
+    print(f"(B)ackpack upgrade to carry {player['backpack'] + 2} items for {bcost} GP")
     print("(L)eave shop")
     print("-----------------------------------------------------------")
-    print(f"GP {player['GP']}")
+    print(f"GP: {player['GP']}")
     print("-----------------------------------------------------------")
 
 # This function shows the mine menu
