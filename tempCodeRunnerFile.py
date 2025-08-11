@@ -420,7 +420,7 @@ def moving_in_mine(dx, dy):
     player['y'] = new_y
     player['steps'] += 1
     player['turns'] -= 1
-    
+
     clear_fog(fog, player)
 
     cell = game_map[player['y']][player['x']]
@@ -431,9 +431,12 @@ def moving_in_mine(dx, dy):
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
-            player['copper'] += pieces_to_add
-            print(f"You mined {pieces} pieces of copper ore!")
-            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            if pieces_to_add > 0:
+                player['copper'] += pieces_to_add
+                print(f"You mined {pieces} pieces of copper ore!")
+                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            else:
+                print("Your backpack is full! You can't carry anymore ore.")
         else:
             player['copper'] += pieces
             print(f"You mined {pieces} pieces of copper ore!")
@@ -445,9 +448,13 @@ def moving_in_mine(dx, dy):
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
-            player['silver'] += pieces_to_add
-            print(f"You mined {pieces} pieces of silver ore!")
-            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            if pieces_to_add > 0:
+                player['silver'] += pieces_to_add
+                print(f"You mined {pieces} pieces of silver ore!")
+                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            else:
+                print("Your backpack is full! You can't carry anymore ore.")
+
         else:
             player['silver'] += pieces
             print(f"You mined {pieces} pieces of silver ore!")
@@ -459,9 +466,12 @@ def moving_in_mine(dx, dy):
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
-            player['gold'] += pieces_to_add
-            print(f"You mined {pieces} pieces of gold ore!")
-            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            if pieces_to_add > 0: 
+                player['gold'] += pieces_to_add
+                print(f"You mined {pieces} pieces of gold ore!")
+                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            else:
+                print("Your backpack is full! You can't carry anymore ore.")
         else:
             player['gold'] += pieces
             print(f"You mined {pieces} pieces of gold ore!")
@@ -484,7 +494,7 @@ def moving_in_mine(dx, dy):
         player['x'] = 0
         player['y'] = 0
         player['turns'] = TURNS_PER_DAY
-        handle_town_menu
+        print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
         return 'town'
     
     return 'in_mine'

@@ -427,13 +427,16 @@ def moving_in_mine(dx, dy):
 
     if cell == 'C' and player['pickaxe'] >= 1:
         print(" --------------------------------------------------- ")
-        pieces = randint(1, 5)  # Random number of pieces of copper ore
+        pieces = randint(1, 5)  # Random number of pieces of copper ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
-            player['copper'] += pieces_to_add
-            print(f"You mined {pieces} pieces of copper ore!")
-            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            if pieces_to_add > 0:
+                player['copper'] += pieces_to_add
+                print(f"You mined {pieces} pieces of copper ore!")
+                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            else:
+                print("Your backpack is full! You can't carry anymore ore.")
         else:
             player['copper'] += pieces
             print(f"You mined {pieces} pieces of copper ore!")
@@ -441,13 +444,17 @@ def moving_in_mine(dx, dy):
 
     elif cell == 'S' and player['pickaxe'] >= 2:
         print(" --------------------------------------------------- ")
-        pieces = randint(1, 3)  # Random number of pieces of silver ore
+        pieces = randint(1, 3)  # Random number of pieces of silver ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
-            player['silver'] += pieces_to_add
-            print(f"You mined {pieces} pieces of silver ore!")
-            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            if pieces_to_add > 0:
+                player['silver'] += pieces_to_add
+                print(f"You mined {pieces} pieces of silver ore!")
+                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            else:
+                print("Your backpack is full! You can't carry anymore ore.")
+
         else:
             player['silver'] += pieces
             print(f"You mined {pieces} pieces of silver ore!")
@@ -455,13 +462,16 @@ def moving_in_mine(dx, dy):
 
     elif cell == 'G' and player['pickaxe'] >= 3:
         print(" --------------------------------------------------- ")
-        pieces = randint(1, 2)  # Random number of pieces of gold ore
+        pieces = randint(1, 2)  # Random number of pieces of gold ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
-            player['gold'] += pieces_to_add
-            print(f"You mined {pieces} pieces of gold ore!")
-            print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            if pieces_to_add > 0: 
+                player['gold'] += pieces_to_add
+                print(f"You mined {pieces} pieces of gold ore!")
+                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
+            else:
+                print("Your backpack is full! You can't carry anymore ore.")
         else:
             player['gold'] += pieces
             print(f"You mined {pieces} pieces of gold ore!")
@@ -480,9 +490,9 @@ def moving_in_mine(dx, dy):
         print("You place your portal stone here and zap back to town...")
         player['portalx'] = player['x']
         player['portaly'] = player['y']
+        player['day'] += 1
         player['x'] = 0
         player['y'] = 0
-        player['day'] += 1
         player['turns'] = TURNS_PER_DAY
         print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
         return 'town'
