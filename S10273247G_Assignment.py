@@ -31,23 +31,26 @@ def load_map(level_1, map_struct):
     try:
         map_file = open('PRG1Assignment/level_1.txt', 'r')
         lines = map_file.readlines()
+        map_file.close()
         global MAP_WIDTH, MAP_HEIGHT
         
         map_struct.clear()
         
+        # First pass to find the maximum width
+        max_width = 0
         for line in lines:
-            line = line.strip()
-            if line:
-                map_struct.append(list(line))
+            line = line.strip('\n')
+            if len(line) > max_width:
+                max_width = len(line)
+        MAP_WIDTH = max_width
+        MAP_HEIGHT = len(lines)
         
-        if map_struct:
-            MAP_WIDTH = len(map_struct[0])
-            MAP_HEIGHT = len(map_struct)
-        else:
-            MAP_WIDTH = 0
-            MAP_HEIGHT = 0
-
-        map_file.close()
+        # Second pass to load the map and pad lines to the max width
+        for line in lines:
+            line = line.strip('\n')
+            padded_line = line.ljust(MAP_WIDTH)
+            map_struct.append(list(padded_line))
+            
     except IOError:
         print(f"Error: Could not load map file '{level_1}'.")
         map_struct.clear()
@@ -181,8 +184,8 @@ def load_game(game_map, fog, player):
         
         global MAP_WIDTH, MAP_HEIGHT
         
-        MAP_WIDTH = int(lines[0].strip().split(':', 1)[1])
-        MAP_HEIGHT = int(lines[1].strip().split(':', 1)[1])
+        MAP_WIDTH = int(lines[0].strip())  
+        MAP_HEIGHT = int(lines[1].strip())
         
         game_map.clear()
         for i in range(2, 2 + MAP_HEIGHT):
@@ -375,7 +378,7 @@ def handle_buy_menu():
         show_buy_menu()
         choice = input("Your choice? ").strip().lower()
         bcost = player['backpack'] * 2
-        pcost = pickaxe_price.get(player['pickaxe'] + 1, 0)
+        pcost = pickaxe_price.get(player['pickaxe'] + 1, 0) if player['pickaxe'] < 3 else 0
         
         if choice == 'p':
             if player['pickaxe'] >= 3:
