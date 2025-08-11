@@ -427,7 +427,7 @@ def moving_in_mine(dx, dy):
 
     if cell == 'C' and player['pickaxe'] >= 1:
         print(" --------------------------------------------------- ")
-        pieces = randint(1, 5)  # Random number of pieces of copper ore
+        pieces = randint(1, 5)  # Random number of pieces of copper ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
@@ -444,7 +444,7 @@ def moving_in_mine(dx, dy):
 
     elif cell == 'S' and player['pickaxe'] >= 2:
         print(" --------------------------------------------------- ")
-        pieces = randint(1, 3)  # Random number of pieces of silver ore
+        pieces = randint(1, 3)  # Random number of pieces of silver ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
@@ -462,7 +462,7 @@ def moving_in_mine(dx, dy):
 
     elif cell == 'G' and player['pickaxe'] >= 3:
         print(" --------------------------------------------------- ")
-        pieces = randint(1, 2)  # Random number of pieces of gold ore
+        pieces = randint(1, 2)  # Random number of pieces of gold ore
         current_load = player['copper'] + player['silver'] + player['gold']
         if current_load + pieces > player['backpack']:
             pieces_to_add = player['backpack'] - current_load
