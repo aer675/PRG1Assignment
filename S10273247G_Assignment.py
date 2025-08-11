@@ -27,8 +27,8 @@ prices['gold'] = (10, 18)
 
 # This function loads a map structure (a nested list) from a file
 # It also updates MAP_WIDTH and MAP_HEIGHT
-def load_map(LEVEL1, map_struct):
-    map_file = open(LEVEL1, 'r')
+def load_map(filename, map_struct):
+    map_file = open(filename, 'r')
     lines = map_file.readlines()
 # Change the two main variables to keep track of the map size
     global MAP_WIDTH 
@@ -180,11 +180,14 @@ def save_game(game_map, fog, player):
         
 # This function loads the game
 def load_game(game_map, fog, player):
+    global MAP_WIDTH, MAP_HEIGHT
+    
     # load map
     # load fog
     # load player
     with open('save_game.txt', 'r') as f:
-        lines = f.readlines()      
+        lines = f.readlines().split('\n\n')    # Split by empty lines
+
     # Load the map
     game_map.clear()
     for line in lines:
