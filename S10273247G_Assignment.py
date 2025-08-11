@@ -477,79 +477,69 @@ def moving_in_mine(dx, dy):
 # This function handles the mine menu
 #BEUHEUICNOINXCDSIJNCIDNDUIDNMKSx
 def handle_mine_menu():
-    # only 20 turns per day
     while True:
         show_mine_menu()
         choice = input("Action? ").strip().lower()
 
-        # W, A, S, D for movement, 
-        #If player steps onto a mineral, a random number pieces of ore will be added to their inventory
-        # If player runs out of turns, they will be teleported to the town
-        # If player step on the 'T' square at (0, 0), they will be teleported to the town
+        state = 'in_mine'
         if choice == 'w':
             state = moving_in_mine(0, -1)
-            if state == 'town':
-                return 'town'
-
         elif choice == 'a':
             state = moving_in_mine(-1, 0)
-            if state == 'town':
-                return 'town'
-        
         elif choice == 's':
             state = moving_in_mine(0, 1)
-            if state == 'town':
-                return 'town'
-
         elif choice == 'd':
             state = moving_in_mine(1, 0)
-            if state == 'town':
-                return 'town'
-
-        # Map, Information, Portal, Quit
         elif choice == 'm':
             draw_map(game_map, fog, player)
-            clear_fog (fog,player)
             continue
-
         elif choice == 'i':
             show_information(player)
             continue
-
-        elif choice == 'p': # Set the portal's coordinates to the player's current location and then return to the town menu
+        elif choice == 'p':
+            print("You place your portal stone here and zap back to town.")
             player['portalx'] = player['x']
             player['portaly'] = player['y']
-            print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
-            print("You have been teleported to Sundrop Town!")
-            player['turns'] = TURNS_PER_DAY # Reset turns for the next day
+            player['x'] = 0
+            player['y'] = 0
             player['day'] += 1
-        
+            player['turns'] = TURNS_PER_DAY
+            print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
             return 'town'
-        
-
         elif choice == 'q':
-            return 'main' # This will return to the main menu
-        
-        # For invalid input
+            return 'main'
         else:
             print("Error. Please enter a valid choice.")
             continue
+            
+        if player['turns'] <= 0 and state == 'in_mine':
+            print("You are exhausted.")
+            print("You place your portal stone here and zap back to town...")
+            player['portalx'] = player['x']
+            player['portaly'] = player['y']
+            player['x'] = 0
+            player['y'] = 0
+            player['day'] += 1
+            player['turns'] = TURNS_PER_DAY
+            print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
+            return 'town'
+        
+        if state == 'town':
+            return 'town'
     
 # Main game loop :D
 # Must have values for game_state, game_map, fog, and player else the game will break
 while True: 
     if game_state == 'main':
-        game_state = handle_main_menu() #this will return to the main menu after loading , same for the rest
-
+        game_state = handle_main_menu()
     elif game_state == 'town':
         game_state = handle_town_menu()
-
     elif game_state == 'in_mine':
         game_state = handle_mine_menu()
-
     elif game_state == 'buy':
         game_state = handle_buy_menu()
-
+    elif game_state == 'win':
+        game_state = 'main'
     elif game_state == 'quit':
         print("Thank you for playing Sundrop Caves!")
         break
