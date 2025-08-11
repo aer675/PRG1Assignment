@@ -159,7 +159,7 @@ def save_game(game_map, fog, player):
     # save fog
     # save player
 
-    with open('PRG1Assignment\savegame.txt', 'w') as f:
+    with open('savegame.txt', 'w') as f:
          # Save map dimensions
         f.write(f"{MAP_WIDTH}\n{MAP_HEIGHT}\n")
             
@@ -363,7 +363,10 @@ def handle_town_menu():
 def handle_buy_menu():
     while True:
         bcost = player['backpack'] * 2 # Cost of the backpack upgrade
-        pcost = pickaxe_price.get(player['pickaxe'], 0) # Cost of the pickaxe upgrade
+        pcost = pickaxe_price.get(player['pickaxe'] + 1, 0) 
+        if player ['pickaxe'] < 3:
+            pass
+        # Cost of the pickaxe upgrade
 
         show_buy_menu()
         choice = input("Your choice? ").strip().lower()
@@ -416,56 +419,44 @@ def moving_in_mine(dx, dy):
     cell = game_map[player['y']][player['x']]
 
     if cell == 'C' and player['pickaxe'] >= 1:
-        print(" --------------------------------------------------- ")
-        pieces = randint(1, 5) # Random number of pieces of copper ore
-        current_load = player['copper'] + player['silver'] + player['gold']
-        if current_load + pieces > player['backpack']:
-            pieces_to_add = player['backpack'] - current_load
-            if pieces_to_add > 0:
-                player['copper'] += pieces_to_add
-                print(f"You mined {pieces} pieces of copper ore!")
-                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
-            else:
-                print("Your backpack is full! You can't carry anymore ore.")
+        pieces = randint(1, 5)
+        if current_load >= player['backpack']:
+            print("Your backpack is full! You can't carry anymore ore.")
         else:
+            space_left = player['backpack'] - current_load
+            pieces = min(pieces, space_left)
             player['copper'] += pieces
             print(f"You mined {pieces} pieces of copper ore!")
-        game_map[player['y']][player['x']] = ' '
+            if pieces < randint(1, 5):
+                print(f"...but you could only carry {pieces} more piece(s)!")
+            game_map[player['y']][player['x']] = ' '
 
     elif cell == 'S' and player['pickaxe'] >= 2:
-        print(" --------------------------------------------------- ")
-        pieces = randint(1, 3) 
-        current_load = player['copper'] + player['silver'] + player['gold']
-        if current_load + pieces > player['backpack']:
-            pieces_to_add = player['backpack'] - current_load
-            if pieces_to_add > 0:
-                player['silver'] += pieces_to_add
-                print(f"You mined {pieces} pieces of silver ore!")
-                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
-            else:
-                print("Your backpack is full! You can't carry anymore ore.")
-
+        pieces = randint(1, 3)
+        if current_load >= player['backpack']:
+            print("Your backpack is full! You can't carry anymore ore.")
         else:
+            space_left = player['backpack'] - current_load
+            pieces = min(pieces, space_left)
             player['silver'] += pieces
             print(f"You mined {pieces} pieces of silver ore!")
-        game_map[player['y']][player['x']] = ' '
+            if pieces < randint(1, 3):
+                print(f"...but you could only carry {pieces} more piece(s)!")
+            game_map[player['y']][player['x']] = ' '
 
     elif cell == 'G' and player['pickaxe'] >= 3:
-        print(" --------------------------------------------------- ")
-        pieces = randint(1, 2) 
-        current_load = player['copper'] + player['silver'] + player['gold']
-        if current_load + pieces > player['backpack']:
-            pieces_to_add = player['backpack'] - current_load
-            if pieces_to_add > 0: 
-                player['gold'] += pieces_to_add
-                print(f"You mined {pieces} pieces of gold ore!")
-                print(f"...but you can only carry {pieces_to_add} more piece(s)!")
-            else:
-                print("Your backpack is full! You can't carry anymore ore.")
+        pieces = randint(1, 2)
+        if current_load >= player['backpack']:
+            print("Your backpack is full! You can't carry anymore ore.")
         else:
+            space_left = player['backpack'] - current_load
+            pieces = min(pieces, space_left)
             player['gold'] += pieces
             print(f"You mined {pieces} pieces of gold ore!")
-        game_map[player['y']][player['x']] = ' '
+            if pieces < randint(1, 2):
+                print(f"...but you could only carry {pieces} more piece(s)!")
+            game_map[player['y']][player['x']] = ' '
+    
     
     # The condition "if current_load + pieces > player['backpack']" needs to be more robust for mining actions.
     # The current code allows the player to move onto a mineral node even if the backpack is full.
