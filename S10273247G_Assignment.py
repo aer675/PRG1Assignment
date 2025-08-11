@@ -1,4 +1,3 @@
-# S10273247G Assignment.py
 # Aerica Gan
 # P12
 # 10 August 2025
