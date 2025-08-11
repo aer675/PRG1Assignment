@@ -27,8 +27,8 @@ prices['gold'] = (10, 18)
 
 # This function loads a map structure (a nested list) from a file
 # It also updates MAP_WIDTH and MAP_HEIGHT
-def load_map(filename, map_struct):
-    map_file = open(filename, 'r')
+def load_map(level_1, map_struct):
+    map_file = open('PRG1Assignment\level_1.txt', 'r')
     lines = map_file.readlines()
     global MAP_WIDTH, MAP_HEIGHT
     
@@ -66,7 +66,7 @@ def clear_fog(fog, player):
 # This function initializes the game state
 def initialize_game(game_map, fog, player):
     # initialize map
-    load_map("PRG1Assignment/LEVEL1.txt", game_map)
+    load_map("PRG1Assignment\level_1.txt", game_map)
 
     fog.clear()
     fog.extend(initialize_fog())
