@@ -18,7 +18,7 @@ WIN_GP = 500
 
 minerals = ['copper', 'silver', 'gold']
 mineral_names = {'C': 'copper', 'S': 'silver', 'G': 'gold'}
-pickaxe_price = {1: 50, 2: 150} # Key is the pickaxe level, value is the price to upgrade
+pickaxe_price = {2: 50, 3: 150} # Key is the pickaxe level, value is the price to upgrade
 
 prices = {}
 prices['copper'] = (1, 3)
@@ -136,7 +136,7 @@ def draw_view(game_map, fog, player):
         row += "|"
         print(row)
     print("+" + "---" + "+")
-    
+
 # This function shows the information for the player
 def show_information(player):
     print()

@@ -118,7 +118,7 @@ def draw_map(game_map, fog, player):
 
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
-    print("+" + "---" * 3 + "+")
+    print("+" + "---" + "+")
     for y_offset in range(-1, 2):
         row = "|"
         for x_offset in range(-1, 2):
@@ -127,15 +127,16 @@ def draw_view(game_map, fog, player):
             
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
                 if y == player['y'] and x == player['x']:
-                    row += " M "
+                    row += "M" # Single character for player
                 else:
-                    row += f" {fog[y][x]} "
+                    # Use a single character for the map tile
+                    row += fog[y][x]
             else:
-                row += " # "
+                row += "#"
         row += "|"
         print(row)
-    print("+" + "---" * 3 + "+")
-
+    print("+" + "---" + "+")
+    
 # This function shows the information for the player
 def show_information(player):
     print()
