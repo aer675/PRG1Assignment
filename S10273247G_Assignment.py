@@ -120,24 +120,21 @@ def draw_map(game_map, fog, player):
 def draw_view(game_map, fog, player):
     print("+" + "---" * 3 + "+")
     for y_offset in range(-1, 2):
-        row_str = "|"
+        row = "|"
         for x_offset in range(-1, 2):
             y = player['y'] + y_offset
             x = player['x'] + x_offset
             
             if 0 <= y < MAP_HEIGHT and 0 <= x < MAP_WIDTH:
-                if player['y'] == y and player['x'] == x:
-                    row_str += " M "
+                if y == player['y'] and x == player['x']:
+                    row += " M "
                 else:
-                    # Now, we correctly display the content from the fog map,
-                    # which has been updated by clear_fog.
-                    row_str += f" {fog[y][x]} "
+                    row += f" {fog[y][x]} "
             else:
-                row_str += " # "
-        row_str += "|"
-        print(row_str)
+                row += " # "
+        row += "|"
+        print(row)
     print("+" + "---" * 3 + "+")
-    return
 
 # This function shows the information for the player
 def show_information(player):
@@ -160,67 +157,56 @@ def save_game(game_map, fog, player):
     # save map
     # save fog
     # save player
+
     with open('save_game.txt', 'w') as f:
-        f.write(f"Map Width: {MAP_WIDTH}\n")
-        f.write(f"Map Height: {MAP_HEIGHT}\n")
-        # Save the map
+         # Save map dimensions
+        f.write(f"{MAP_WIDTH}\n{MAP_HEIGHT}\n")
+            
+        # Save map
         for row in game_map:
             f.write(''.join(row) + '\n')
-        f.write('\n')  # Add a newline to separate map from player data
-        # Save the fog
+            
+        # Save fog
         for row in fog:
             f.write(''.join(row) + '\n')
-        f.write('\n')  # Add a newline to separate fog from player data
-        # Save the player data
+            
+            # Save player data
         for key, value in player.items():
             f.write(f"{key}:{value}\n")
-    print("Game saved.")
-    return
+            
+        print("Game saved.")
         
 # This function loads the game
 def load_game(game_map, fog, player):
-    global MAP_WIDTH, MAP_HEIGHT
-    
-    # load map
-    # load fog
-    # load player
-    with open('save_game.txt', 'r') as f:
+with open('save_game.txt', 'r') as f:
         lines = f.readlines()
-
-    # Load the map
-    MAP_WIDTH = int(lines[0].split(': ')[1])
-    MAP_HEIGHT = int(lines[1].split(': ')[1])
-    
-    # Process the rest of the file
-    content = ''.join(lines[2:])
-    sections = content.split('\n\n')
-
-    # Load the map
-    game_map.clear()
-    for line in sections[0].strip().split('\n'):
-        if line.strip():
-            game_map.append(list(line.strip()))
-    
-    # Load the fog
-    fog.clear()
-    for line in sections[1].strip().split('\n'):
-        if line.strip():
-            fog.append(list(line.strip()))
-    
-    # Load the player data
-    player.clear()
-    for line in sections[2].strip().split('\n'):
-        if ':' in line:
-            key, value = line.split(':', 1)
-            key = key.strip()
-            value = value.strip()
-            if key in player:
-                if value.isdigit() or (value[0] == '-' and value[1:].isdigit()):
+            
+        # Load map dimensions
+        global MAP_WIDTH, MAP_HEIGHT
+        MAP_WIDTH = int(lines[0].strip())
+        MAP_HEIGHT = int(lines[1].strip())
+            
+        # Load map
+        game_map.clear()
+        for i in range(2, 2 + MAP_HEIGHT):
+            game_map.append(list(lines[i].strip()))
+            
+        # Load fog
+        fog.clear()
+        for i in range(2 + MAP_HEIGHT, 2 + MAP_HEIGHT * 2):
+            fog.append(list(lines[i].strip()))
+            
+        # Load player data
+        player.clear()
+        for line in lines[2 + MAP_HEIGHT * 2:]:
+            if ':' in line:
+                key, value = line.strip().split(':', 1)
+                try:
                     player[key] = int(value)
-                else:
+                except ValueError:
                     player[key] = value
-    print("Game loaded.")
-    return 
+            
+        print("Game loaded.")
 
 #This function shows the main menu
 def show_main_menu():
@@ -425,6 +411,7 @@ def moving_in_mine(dx, dy):
 
     clear_fog(fog, player)
 
+    current_load = player['copper'] + player['silver'] + player['gold']
     cell = game_map[player['y']][player['x']]
 
     if cell == 'C' and player['pickaxe'] >= 1:
