@@ -104,12 +104,12 @@ def draw_map(game_map, fog, player):
     for y in range(MAP_HEIGHT):
         row_to_print = []
         for x in range(MAP_WIDTH):
-            if fog[y][x] == '?':
-                row_to_print.append('?')
-            elif player ['y'] == y and player['x'] == x:
+            if player['y'] == y and player['x'] == x:
                 row_to_print.append('M')
             elif player['portalx'] == x and player['portaly'] == y:
                 row_to_print.append('T')
+            elif fog[y][x] == '?':
+                row_to_print.append('?')
             else:
                 row_to_print.append(game_map[y][x])
         print("|" + ''.join(row_to_print) + "|")
@@ -189,27 +189,37 @@ def load_game(game_map, fog, player):
         lines = f.readlines()
 
     # Load the map
+    MAP_WIDTH = int(lines[0].split(': ')[1])
+    MAP_HEIGHT = int(lines[1].split(': ')[1])
+    
+    # Process the rest of the file
+    content = ''.join(lines[2:])
+    sections = content.split('\n\n')
+
+    # Load the map
     game_map.clear()
-    for line in lines:
-        line = line.strip()
-        if line and not line.startswith('?'):
-            game_map.append(list(line))  # Convert the line to a list of characters
+    for line in sections[0].strip().split('\n'):
+        if line.strip():
+            game_map.append(list(line.strip()))
+    
     # Load the fog
     fog.clear()
-    for line in lines:
-        line = line.strip()         
-        if line and line.startswith('?'):
-            fog.append(list(line))  # Convert the line to a list of characters          
+    for line in sections[1].strip().split('\n'):
+        if line.strip():
+            fog.append(list(line.strip()))
+    
     # Load the player data
-    for line in lines:
-        line = line.strip()
-        if line and ':' in line:
-            key, value = line.split(':', 1) 
+    player.clear()
+    for line in sections[2].strip().split('\n'):
+        if ':' in line:
+            key, value = line.split(':', 1)
+            key = key.strip()
+            value = value.strip()
             if key in player:
-                if value.isdigit():     
-                    player[key] = int(value)  # Convert to integer if it's a number
+                if value.isdigit() or (value[0] == '-' and value[1:].isdigit()):
+                    player[key] = int(value)
                 else:
-                    player[key] = value  # Keep as string otherwise
+                    player[key] = value
     print("Game loaded.")
     return 
 
@@ -405,10 +415,12 @@ def moving_in_mine(dx, dy):
         print("You can't move that way, you are at the edge of the mine.")
         player['turns'] -= 1
         return 'in_mine'
+    
     player['x'] = new_x
     player['y'] = new_y
     player['steps'] += 1
     player['turns'] -= 1
+
     clear_fog(fog, player)
 
     cell = game_map[player['y']][player['x']]
@@ -468,11 +480,11 @@ def moving_in_mine(dx, dy):
         print("You place your portal stone here and zap back to town...")
         player['portalx'] = player['x']
         player['portaly'] = player['y']
-        player['day'] += 1
         player['x'] = 0
         player['y'] = 0
+        player['day'] += 1
         player['turns'] = TURNS_PER_DAY
-        handle_town_menu
+        print(f"Portal set to ({player['portalx']}, {player['portaly']}).")
         return 'town'
     
     return 'in_mine'
